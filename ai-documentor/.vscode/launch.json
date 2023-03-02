@@ -10,9 +10,7 @@
       "type": "extensionHost",
       "request": "launch",
       "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
-      "env": {
-        "OPENAI_API_KEY": "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"
-      },
+      "envFile": "${workspaceFolder}/.env",
       "outFiles": ["${workspaceFolder}/dist/**/*.js"],
       "preLaunchTask": "${defaultBuildTask}"
     },
