@@ -24,7 +24,7 @@ export function activate(context: vscode.ExtensionContext) {
       const selectedText = editor?.document.getText(selection);
 
       try {
-        const response = await axios.post('http://localhost:5000/', {
+        const response = await axios.post('http://localhost:8080/', {
           selectedText,
         });
 

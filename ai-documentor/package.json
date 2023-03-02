@@ -9,7 +9,9 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "ai-documentor.document"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "keybindings": [
@@ -22,7 +24,7 @@
     "commands": [
       {
         "command": "ai-documentor.document",
-        "title": "Document"
+        "title": "Document Code"
       }
     ],
     "menus": {
