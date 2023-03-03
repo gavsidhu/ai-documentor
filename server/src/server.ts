@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { Configuration, OpenAIApi } from 'openai';
 import dotenv from 'dotenv';
+import authRoutes from './routes/AuthRoutes'
 
 dotenv.config();
 
@@ -18,6 +19,8 @@ const app = express();
 app.use(express.json());
 
 app.use(cors());
+
+app.use('/auth', authRoutes);
 
 app.post('/', async (req, res) => {
   const { selectedText } = req.body;
