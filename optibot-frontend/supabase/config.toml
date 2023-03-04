@@ -1,6 +1,6 @@
 # A string used to distinguish different Supabase projects on the same host. Defaults to the working
 # directory name when running `supabase init`.
-project_id = "nextjs-subscription-payments"
+project_id = "Optibot"
 
 [api]
 # Port to use for the API URL.
@@ -72,8 +72,8 @@ redirect_uri = "http://localhost:54321/auth/v1/callback"
 url = ""
 [auth.external.github]
 enabled = true
-client_id = ""
-secret = ""
+client_id = "57b7663f28ed9fac2536"
+secret = "5cde314485fac52bdc1d65480d333aa9269e36b8"
 # Overrides the default auth redirectUrl.
 redirect_uri = "http://localhost:54321/auth/v1/callback"
 # Overrides the default auth provider URL. Used to support self-hosted gitlab, single-tenant Azure,
