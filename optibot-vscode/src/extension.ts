@@ -1,21 +1,30 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
+/**
+ * Import necessary modules
+ */
 import * as vscode from 'vscode';
 import axios, { AxiosError } from 'axios';
-import AuthService, { getCookie } from './AuthService';
 import { Octokit } from '@octokit/rest';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
+/**
+ * Activate extension
+ * @param {vscode.ExtensionContext} context - Extension context object
+ */
 export function activate(context: vscode.ExtensionContext) {
-  // Use the console to output diagnostic information (console.log) and errors (console.error)
-  // This line of code will only be executed once when your extension is activated
-  console.log('Congratulations, your extension "Optibot" is now active!');
-  const authService = new AuthService(context);
 
+  /**
+   * Register command for refactoring text
+   * @param {string} optibot.refactor - Command name
+   * @param {Function} async () - Async function to handle command execution
+   */
   let disposableRefactor = vscode.commands.registerCommand(
-    'ai-documentor.refactor',
+    'optibot.refactor',
     async () => {
+      /**
+      * Authenticate user for GitHub
+      * @param {string} github - Authentication provider
+      * @param {string[]} user:email - Scopes required for authentication
+      * @param {Object} { createIfNone: true } - Options for authentication
+      */
       const session = await vscode.authentication.getSession(
         'github',
         ['user:email'],
@@ -23,28 +32,51 @@ export function activate(context: vscode.ExtensionContext) {
           createIfNone: true,
         }
       );
-
+      
+      /**
+      * Create new Octokit object for GitHub API calls
+      * @param {string} session.accessToken - Access token for GitHub API
+      */
       const octokit = new Octokit({
         auth: session.accessToken,
       });
 
+      /**
+      * Get authenticated user's information
+      */
       const user = await octokit.users.getAuthenticated();
       console.log(user.data);
+      
+      /**
+      * Show error message if user is not authenticated
+      * @param {string} Not signed in - Error message displayed
+      */
       if (!session) {
-        vscode.window.showInformationMessage(
-          'You need to sign in to use AI Documentor'
+        vscode.window.showErrorMessage(
+          'Not signed in'
         );
         return;
       }
 
+      /**
+      * Execute code block if user is authenticated
+      */
       if (session) {
+        /**
+        * Create status bar spinner for loading feedback
+        * @param {string} sync~spin - Icon for spinner
+        * @param {vscode.StatusBarAlignment} Left - Alignment of spinner
+        */
         const spinner = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
         spinner.text = "$(sync~spin) Loading...";
         spinner.show();
         // Get the current text editor
         const editor = vscode.window.activeTextEditor;
 
-        // If no text is selected, show an error message
+        /**
+        * Show error message if no text is selected in the editor
+        * @param {string} No text selected - Error message displayed
+        */
         if (!editor || editor.selection.isEmpty) {
           vscode.window.showErrorMessage('No text selected');
           return;
@@ -56,8 +88,14 @@ export function activate(context: vscode.ExtensionContext) {
         
 
         try {
-          
-          const response = await axios.post('http://localhost:8080/refactor', {
+          /**
+          * Send HTTP POST request to a local server for refactoring selected text
+          * @param {string} 'http://localhost:3000/api/optibot/refactor' - URL for HTTP request
+          * @param {Object} {selectedText, email: user.data.email} - Request data
+          * @param {Object} headers - Request headers
+          * @param {string} "Content-Type": "application/json" - Request Content-Type
+          */
+          const response = await axios.post('http://localhost:3000/api/optibot/refactor', {
             selectedText,
             email: user.data.email
           },
@@ -68,10 +106,19 @@ export function activate(context: vscode.ExtensionContext) {
             }
           });
 
+          /**
+          * Dispose spinner if response is successful
+          */
           if(response.statusText === 'OK') {
             spinner.dispose();
           }
 
+          /**
+          * Create WorkspaceEdit object and replace selected text with refactored text
+          * @param {vscode.Uri} editor?.document.uri - URI of active text editor
+          * @param {vscode.Range} editor?.selection - Range of selected text
+          * @param {string} response.data.content - Refactored text received in response
+          */
           const edit = new vscode.WorkspaceEdit();
           edit.replace(
             editor?.document.uri as vscode.Uri,
@@ -79,9 +126,18 @@ export function activate(context: vscode.ExtensionContext) {
             response.data.content
           );
           await vscode.workspace.applyEdit(edit);
-          vscode.window.showInformationMessage('API request successful');
+
+          /**
+          * Show information message as feedback for API request success
+          * @param {string} API request successful - Success message displayed
+          */
+          vscode.window.showInformationMessage('Refactor successful');
           console.log(response.data.content);
         } catch (error) {
+          /**
+          * Display error message in console
+          * @param {AxiosError} error - Error object received from Axios request
+          */
           if (error instanceof AxiosError) {
             console.log(error.message);
           }
@@ -91,12 +147,20 @@ export function activate(context: vscode.ExtensionContext) {
     }
   );
 
-  // The command has been defined in the package.json file
-  // Now provide the implementation of the command with registerCommand
-  // The commandId parameter must match the command field in package.json
+  /**
+   * Register command for documenting code
+   * @param {string} optibot.document - Command name
+   * @param {Function} async () - Async function to handle command execution
+   */
   let disposable = vscode.commands.registerCommand(
-    'ai-documentor.document',
+    'optibot.document',
     async () => {
+      /**
+      * Authenticate user for GitHub
+      * @param {string} github - Authentication provider
+      * @param {string[]} user:email - Scopes required for authentication
+      * @param {Object} { createIfNone: true } - Options for authentication
+      */
       const session = await vscode.authentication.getSession(
         'github',
         ['user:email'],
@@ -104,13 +168,25 @@ export function activate(context: vscode.ExtensionContext) {
           createIfNone: true,
         }
       );
-
+      
+      /**
+      * Create new Octokit object for GitHub API calls
+      * @param {string} session.accessToken - Access token for GitHub API
+      */
       const octokit = new Octokit({
         auth: session.accessToken,
       });
 
+      /**
+      * Get authenticated user's information
+      */
       const user = await octokit.users.getAuthenticated();
       console.log(user.data);
+      
+      /**
+      * Show error message if user is not authenticated
+      * @param {string} You need to sign in to use AI Documentor - Error message displayed
+      */
       if (!session) {
         vscode.window.showInformationMessage(
           'You need to sign in to use AI Documentor'
@@ -118,14 +194,25 @@ export function activate(context: vscode.ExtensionContext) {
         return;
       }
 
+      /**
+      * Execute code block if user is authenticated
+      */
       if (session) {
+        /**
+        * Create status bar spinner for loading feedback
+        * @param {string} sync~spin - Icon for spinner
+        * @param {vscode.StatusBarAlignment} Left - Alignment of spinner
+        */
         const spinner = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
         spinner.text = "$(sync~spin) Loading...";
         spinner.show();
         // Get the current text editor
         const editor = vscode.window.activeTextEditor;
 
-        // If no text is selected, show an error message
+        /**
+        * Show error message if no text is selected in the editor
+        * @param {string} No text selected - Error message displayed
+        */
         if (!editor || editor.selection.isEmpty) {
           vscode.window.showErrorMessage('No text selected');
           return;
@@ -136,7 +223,14 @@ export function activate(context: vscode.ExtensionContext) {
         const selectedText = editor?.document.getText(selection);
 
         try {
-          const response = await axios.post('http://localhost:8080/document', {
+          /**
+          * Send HTTP POST request to a local server for documenting selected code
+          * @param {string} 'http://localhost:3000/api/optibot/document' - URL for HTTP request
+          * @param {Object} {selectedText, email: user.data.email} - Request data
+          * @param {Object} headers - Request headers
+          * @param {string} "Content-Type": "application/json" - Request Content-Type
+          */
+          const response = await axios.post('http://localhost:3000/api/optibot/document', {
             selectedText,
             email: user.data.email
           },
@@ -147,10 +241,19 @@ export function activate(context: vscode.ExtensionContext) {
             }
           });
 
+          /**
+          * Dispose spinner if response is successful
+          */
           if(response.statusText === 'OK') {
             spinner.dispose();
           }
 
+          /**
+          * Create WorkspaceEdit object and replace selected code with documented code
+          * @param {vscode.Uri} editor?.document.uri - URI of active text editor
+          * @param {vscode.Range} editor?.selection - Range of selected text
+          * @param {string} response.data.content - Documented code received in response
+          */
           const edit = new vscode.WorkspaceEdit();
           edit.replace(
             editor?.document.uri as vscode.Uri,
@@ -158,21 +261,36 @@ export function activate(context: vscode.ExtensionContext) {
             response.data.content
           );
           await vscode.workspace.applyEdit(edit);
-          vscode.window.showInformationMessage('API request successful');
-          console.log(response.data.content);
+
+          /**
+          * Show information message as feedback for API request success
+          * @param {string} Refactor successful - Success message displayed
+          */
+          vscode.window.showInformationMessage('Document successful');
         } catch (error) {
-          if (error instanceof AxiosError) {
-            console.log(error.message);
+          /**
+          * Display error message in console
+          * @param {AxiosError} error - Error object received from Axios request
+          */
+          if (axios.isAxiosError(error)) {
+            const axiosError = error as AxiosError;
+            vscode.window.showErrorMessage(`Error: ${axiosError.message}`);
+          } else {
+            vscode.window.showErrorMessage(`Error: ${error}`);
           }
-          console.log(error);
         }
       }
     }
   );
 
+  /**
+  * Push disposables to context
+  */
   context.subscriptions.push(disposable);
   context.subscriptions.push(disposableRefactor);
 }
 
-// This method is called when your extension is deactivated
+/**
+ * Deactivate extension
+ */
 export function deactivate() {}

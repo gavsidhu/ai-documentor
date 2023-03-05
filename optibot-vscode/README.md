@@ -1,6 +1,6 @@
-# ai-documentor README
+# optibot README
 
-This is the README for your extension "ai-documentor". After writing up a brief description, we recommend including the following sections.
+This is the README for your extension "optibot". After writing up a brief description, we recommend including the following sections.
 
 ## Features
 

@@ -15,7 +15,7 @@ export default class AuthService {
     await signInWithPopup(auth, this.githubProvider)
       .then((result) => {
         console.log(result.user);
-        this.context.globalState.update('ai-documentor-user', result.user);
+        this.context.globalState.update('optibot-user', result.user);
       })
       .catch((error) => console.log(error));
   }

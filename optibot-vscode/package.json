@@ -1,6 +1,6 @@
 {
-  "name": "ai-documentor",
-  "displayName": "ai-documentor",
+  "name": "optibot",
+  "displayName": "optibot",
   "description": "",
   "version": "0.0.1",
   "engines": {
@@ -10,42 +10,42 @@
     "Other"
   ],
   "activationEvents": [
-    "ai-documentor.document",
-    "ai-documentor.refactor"
+    "optibot.document",
+    "optibot.refactor"
   ],
   "main": "./dist/extension.js",
   "contributes": {
     "keybindings": [
       {
-        "command": "ai-documentor.document",
+        "command": "optibot.document",
         "key": "ctrl+shift+/",
         "when": "editorTextFocus"
       },
       {
-        "command": "ai-documentor.refactor",
+        "command": "optibot.refactor",
         "key": "ctrl+shift+;",
         "when": "editorTextFocus"
       }
     ],
     "commands": [
       {
-        "command": "ai-documentor.document",
+        "command": "optibot.document",
         "title": "Optibot Document"
       },
       {
-        "command": "ai-documentor.refactor",
+        "command": "optibot.refactor",
         "title": "Optibot Refactor"
       }
     ],
     "menus": {
       "editor/context": [
         {
-          "command": "ai-documentor.document",
+          "command": "optibot.document",
           "group": "navigation",
           "when": "editorTextFocus"
         },
         {
-          "command": "ai-documentor.refactor",
+          "command": "optibot.refactor",
           "group": "navigation",
           "when": "editorTextFocus"
         }
