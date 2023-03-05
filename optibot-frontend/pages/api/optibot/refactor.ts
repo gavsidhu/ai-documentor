@@ -8,7 +8,7 @@ const configuration = new Configuration({
   
   const openai = new OpenAIApi(configuration);
 
-const Document: NextApiHandler = async (req, res) => {
+const Refactor: NextApiHandler = async (req, res) => {
     const { selectedText } = req.body;
   try {
     const completion = await openai.createChatCompletion({
@@ -17,13 +17,13 @@ const Document: NextApiHandler = async (req, res) => {
         {
           role: 'system',
           content:
-            'You are a helpful coding assistant that helps document code. You generate inline documentation that can be read by documentation generators.',
+            'You are a helpful coding assistant that helps refactor and optimize code. Only return code back with no explanations',
         },
         {
           role: 'user',
           content:
-            'Can you rewrite the following code with inline documentation using documentation syntax. Return the documented code without any additional text:\n' +
-            selectedText,
+            `Refactor and optimize the following code to make it more readable, efficient and maintainable. Return the refactored code without any additional text:
+            ${selectedText}`
         },
       ],
     });
@@ -35,4 +35,4 @@ const Document: NextApiHandler = async (req, res) => {
   }
 };
 
-export default Document;
+export default Refactor;

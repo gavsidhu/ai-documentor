@@ -30,12 +30,12 @@ app.post('/refactor', async (req, res) => {
         {
           role: 'system',
           content:
-            'You are a helpful coding assistant that helps refactor code. Only return code back with no explanations',
+            'You are a helpful coding assistant that helps refactor and optimize code. Only return code back with no explanations',
         },
         {
           role: 'user',
           content:
-            `Refactor the following code to make it more readable, efficient and maintainable. Return the refactored code without any additional text:
+            `Refactor and optimize the following code to make it more readable, efficient and maintainable. Return the refactored code without any additional text:
             ${selectedText}`
         },
       ],
