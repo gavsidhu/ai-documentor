@@ -2,7 +2,6 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import axios, { AxiosError } from 'axios';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
 import AuthService, { getCookie } from './AuthService';
 import { Octokit } from '@octokit/rest';
 
@@ -11,12 +10,85 @@ import { Octokit } from '@octokit/rest';
 export function activate(context: vscode.ExtensionContext) {
   // Use the console to output diagnostic information (console.log) and errors (console.error)
   // This line of code will only be executed once when your extension is activated
-  console.log('Congratulations, your extension "ai-documentor" is now active!');
+  console.log('Congratulations, your extension "Optibot" is now active!');
   const authService = new AuthService(context);
 
-  let disposableLoogin = vscode.commands.registerCommand(
-    'ai-documentor.login',
-    async () => {}
+  let disposableRefactor = vscode.commands.registerCommand(
+    'ai-documentor.refactor',
+    async () => {
+      const session = await vscode.authentication.getSession(
+        'github',
+        ['user:email'],
+        {
+          createIfNone: true,
+        }
+      );
+
+      const octokit = new Octokit({
+        auth: session.accessToken,
+      });
+
+      const user = await octokit.users.getAuthenticated();
+      console.log(user.data);
+      if (!session) {
+        vscode.window.showInformationMessage(
+          'You need to sign in to use AI Documentor'
+        );
+        return;
+      }
+
+      if (session) {
+        const spinner = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
+        spinner.text = "$(sync~spin) Loading...";
+        spinner.show();
+        // Get the current text editor
+        const editor = vscode.window.activeTextEditor;
+
+        // If no text is selected, show an error message
+        if (!editor || editor.selection.isEmpty) {
+          vscode.window.showErrorMessage('No text selected');
+          return;
+        }
+
+        // Get the selected text in the editor
+        const selection = editor?.selection;
+        const selectedText = editor?.document.getText(selection);
+        
+
+        try {
+          
+          const response = await axios.post('http://localhost:8080/refactor', {
+            selectedText,
+            email: user.data.email
+          },
+          {
+            headers: {
+              // eslint-disable-next-line @typescript-eslint/naming-convention
+              "Content-Type": "application/json"
+            }
+          });
+
+          if(response.statusText === 'OK') {
+            spinner.dispose();
+          }
+
+          const edit = new vscode.WorkspaceEdit();
+          edit.replace(
+            editor?.document.uri as vscode.Uri,
+            editor?.selection as vscode.Range,
+            response.data.content
+          );
+          await vscode.workspace.applyEdit(edit);
+          vscode.window.showInformationMessage('API request successful');
+          console.log(response.data.content);
+        } catch (error) {
+          if (error instanceof AxiosError) {
+            console.log(error.message);
+          }
+          console.log(error);
+        }
+      }
+    }
   );
 
   // The command has been defined in the package.json file
@@ -47,6 +119,9 @@ export function activate(context: vscode.ExtensionContext) {
       }
 
       if (session) {
+        const spinner = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
+        spinner.text = "$(sync~spin) Loading...";
+        spinner.show();
         // Get the current text editor
         const editor = vscode.window.activeTextEditor;
 
@@ -61,9 +136,20 @@ export function activate(context: vscode.ExtensionContext) {
         const selectedText = editor?.document.getText(selection);
 
         try {
-          const response = await axios.post('http://localhost:8080/', {
+          const response = await axios.post('http://localhost:8080/document', {
             selectedText,
+            email: user.data.email
+          },
+          {
+            headers: {
+              // eslint-disable-next-line @typescript-eslint/naming-convention
+              "Content-Type": "application/json"
+            }
           });
+
+          if(response.statusText === 'OK') {
+            spinner.dispose();
+          }
 
           const edit = new vscode.WorkspaceEdit();
           edit.replace(
@@ -85,6 +171,7 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(disposable);
+  context.subscriptions.push(disposableRefactor);
 }
 
 // This method is called when your extension is deactivated

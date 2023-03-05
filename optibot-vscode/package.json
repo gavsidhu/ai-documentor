@@ -10,7 +10,8 @@
     "Other"
   ],
   "activationEvents": [
-    "ai-documentor.document"
+    "ai-documentor.document",
+    "ai-documentor.refactor"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -19,18 +20,32 @@
         "command": "ai-documentor.document",
         "key": "ctrl+shift+/",
         "when": "editorTextFocus"
+      },
+      {
+        "command": "ai-documentor.refactor",
+        "key": "ctrl+shift+;",
+        "when": "editorTextFocus"
       }
     ],
     "commands": [
       {
         "command": "ai-documentor.document",
-        "title": "Document Code"
+        "title": "Optibot Document"
+      },
+      {
+        "command": "ai-documentor.refactor",
+        "title": "Optibot Refactor"
       }
     ],
     "menus": {
       "editor/context": [
         {
           "command": "ai-documentor.document",
+          "group": "navigation",
+          "when": "editorTextFocus"
+        },
+        {
+          "command": "ai-documentor.refactor",
           "group": "navigation",
           "when": "editorTextFocus"
         }
