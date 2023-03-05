@@ -8,17 +8,15 @@ import { getStripe } from '@/utils/stripe-client';
 import { useUser } from '@/utils/useUser';
 
 import { Price, ProductWithPrice } from 'types';
+import { productIds } from '@/constant/products';
 
 interface Props {
   products: ProductWithPrice[];
 }
 
-type BillingInterval = 'year' | 'month';
 
 export default function Pricing({ products }: Props) {
   const router = useRouter();
-  const [billingInterval, setBillingInterval] =
-    useState<BillingInterval>('month');
   const [priceIdLoading, setPriceIdLoading] = useState<string>();
   const { user, isLoading, subscription } = useUser();
 
@@ -45,7 +43,7 @@ export default function Pricing({ products }: Props) {
       setPriceIdLoading(undefined);
     }
   };
-
+  console.log(products)
   return (
     <section className="bg-black">
       <div className="max-w-6xl mx-auto py-8 sm:py-24 px-4 sm:px-6 lg:px-8">
@@ -64,13 +62,65 @@ export default function Pricing({ products }: Props) {
               (price) => price.active === true
             );
             if (!price) return null;
-            const priceString = new Intl.NumberFormat('en-US', {
-              style: 'currency',
-              currency: price.currency,
-              minimumFractionDigits: 0
-            }).format((price?.unit_amount || 0) / 100);
+            let priceString;
+            if (product.id === productIds.standard) {
+              priceString = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: price.currency,
+                minimumFractionDigits: 0
+              }).format((price?.unit_amount || 0) / 1200);
+            } else {
+              priceString = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: price.currency,
+                minimumFractionDigits: 0
+              }).format((price?.unit_amount || 0) / 100);
+            }
+
             return (
-              <div
+              <div key={product.id}>
+                <div className="bg-zinc-900 rounded-lg shadow-sm divide-y divide-zinc-600 -mt-2 p-2 lg:mt-0 lg:w-full lg:max-w-md lg:flex-shrink-0">
+                  <div className="rounded-2xl py-10 text-center ring-1 ring-inset ring-gray-900/5 lg:flex lg:flex-col lg:justify-center lg:py-16">
+                    <div className="mx-auto max-w-xs px-8">
+                      <h2 className="text-2xl leading-6 font-semibold text-white">{product.name}</h2>
+                      <p className="mt-4 text-zinc-300">{product.description}</p>
+                      <p className="mt-6 flex items-baseline justify-center gap-x-2">
+                        <span className="text-5xl font-extrabold text-white">{priceString}</span >
+                        {product.id === productIds.standard ? <span className="text-sm font-semibold leading-6 tracking-wide text-white">/Month</span> : null}
+                      </p>
+                      {product.id === productIds.standard ? <p className="mt-6 text-xs leading-5 text-white">
+                        Billed annually*
+                      </p> : <p className="mt-6 text-xs leading-5 text-white">
+                        Pay once, own it forever
+                      </p>}
+                      <Button
+                        variant="slim"
+                        type="button"
+                        disabled={isLoading}
+                        loading={priceIdLoading === price.id}
+                        onClick={() => handleCheckout(price)}
+                        className="mt-8 block w-full rounded-md py-2 text-sm font-semibold text-white text-center hover:bg-zinc-900"
+                      >
+                        {product.name === subscription?.prices?.products?.name
+                          ? 'Manage'
+                          : 'Get Started'}
+                      </Button>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+
+/*
+ <div
                 key={product.id}
                 className={cn(
                   'rounded-lg shadow-sm divide-y divide-zinc-600 bg-zinc-900',
@@ -90,9 +140,6 @@ export default function Pricing({ products }: Props) {
                     <span className="text-5xl font-extrabold white">
                       {priceString}
                     </span>
-                    <span className="text-base font-medium text-zinc-100">
-                      /{billingInterval}
-                    </span>
                   </p>
                   <Button
                     variant="slim"
@@ -108,10 +155,19 @@ export default function Pricing({ products }: Props) {
                   </Button>
                 </div>
               </div>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-}
+              */
+
+/*
+<Button
+                    variant="slim"
+                    type="button"
+                    disabled={isLoading}
+                    loading={priceIdLoading === price.id}
+                    onClick={() => handleCheckout(price)}
+                    className="mt-8 block w-full rounded-md py-2 text-sm font-semibold text-white text-center hover:bg-zinc-900"
+                  >
+                    {product.name === subscription?.prices?.products?.name
+                      ? 'Manage'
+                      : 'Subscribe'}
+                  </Button>
+                  */
