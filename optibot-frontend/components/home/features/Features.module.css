@@ -1,0 +1,27 @@
+.offsetCard {
+  transform: translateY(128px);
+}
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 256px 128px;
+  padding-bottom: 128px;
+}
+
+.gridContainer > div {
+  text-align: center;
+  font-size: 30px;
+}
+
+@media screen and (max-width: 480px) {
+  .gridContainer {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 128px;
+    padding: 20px;
+  }
+  .offsetCard {
+    transform: translateY(0px);
+  }
+}
