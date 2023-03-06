@@ -2,24 +2,39 @@
   transform: translateY(128px);
 }
 
-.gridContainer {
+.gridContainerCards {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 256px 128px;
   padding-bottom: 128px;
+  margin-top: 32px;
 }
 
-.gridContainer > div {
+.gridContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 256px 128px;
+  margin-top: 256px;
+  padding-bottom: 128px;
+}
+
+.gridContainerCards > div {
   text-align: center;
   font-size: 30px;
 }
 
 @media screen and (max-width: 480px) {
+  .gridContainerCards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 128px;
+    padding: 64px 20px;
+  }
   .gridContainer {
     display: grid;
     grid-template-columns: 1fr;
     gap: 128px;
-    padding: 20px;
+    padding: 64px 20px;
   }
   .offsetCard {
     transform: translateY(0px);

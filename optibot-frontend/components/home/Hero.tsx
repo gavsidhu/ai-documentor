@@ -1,6 +1,9 @@
+import { useUser } from '@/utils/useUser';
 import React from 'react'
+import Link from 'next/link';
 
 const Hero = () => {
+    const { user } = useUser();
     return (
         <div>
             <div className="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]">
@@ -11,26 +14,36 @@ const Hero = () => {
                 <div className="relative py-24 sm:py-32 lg:pb-40">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
                         <div className="mx-auto max-w-4xl text-center">
-                            <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
-                            Supercharge Your Development with Optibot
+                            <h1 className="text-4xl leading-normal font-bold tracking-tight text-white sm:text-6xl sm:leading-normal">
+                                Instantly Write Cleaner and Better Code
                             </h1>
-                            <p className="mt-6 text-lg leading-8 text-gray-300">
-                            Our extension streamlines your workflow and boosts productivity, saving you time and energy. With powerful features and intuitive design, it's the ultimate tool for developers.
-                            </p>
                             <div className="mt-10">
-                                <a
-                                    href="#"
-                                    className="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400"
-                                >
-                                    Get started
-                                </a>
+                                {user ? (
+                                    <a
+                                        href="#"
+                                        className="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400"
+                                    >
+                                        Get Optibot for VS Code
+                                    </a>
+
+                                ) : (
+                                    <Link
+                                        href="#"
+                                        className="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400"
+                                    >
+                                        Get Started
+                                    </Link>
+                                )}
+
                             </div>
                         </div>
-                        <img
-                            src="https://tailwindui.com/img/component-images/dark-project-app-screenshot.png"
-                            alt="App screenshot"
+                        <video
+                            src="optibot-demo.mp4"
                             width={2432}
                             height={1442}
+                            loop
+                            autoPlay
+                            muted
                             className="mt-16 rounded-md bg-white/5 shadow-2xl ring-1 ring-white/10 sm:mt-24"
                         />
                     </div>

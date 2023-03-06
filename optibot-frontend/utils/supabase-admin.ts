@@ -177,9 +177,36 @@ const manageSubscriptionStatusChange = async (
     );
 };
 
+const checkIfUserExists = async (email: string) => {
+  const { data } = await supabaseAdmin
+    .from('users')
+    .select()
+    .eq('email', email);
+
+  if (!data || data.length === 0) {
+    return null;
+  }
+  return data[0];
+};
+
+const checkIfUserIsSubscribed = async (
+  user: Database['public']['Tables']['users']['Row']
+) => {
+  const { data } = await supabaseAdmin
+    .from('subscriptions')
+    .select('*')
+    .eq('user_id', user?.id);
+  if (!data) {
+    return null;
+  }
+  return data[0];
+};
+
 export {
   upsertProductRecord,
   upsertPriceRecord,
   createOrRetrieveCustomer,
-  manageSubscriptionStatusChange
+  manageSubscriptionStatusChange,
+  checkIfUserExists,
+  checkIfUserIsSubscribed
 };
