@@ -58,6 +58,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 export default function Account({ user }: { user: User }) {
   const [loading, setLoading] = useState(false);
   const { isLoading, subscription, userDetails } = useUser();
+  console.log(user)
 
   const redirectToCustomerPortal = async () => {
     setLoading(true);
@@ -81,7 +82,7 @@ export default function Account({ user }: { user: User }) {
     }).format((subscription?.prices?.unit_amount || 0) / 100);
 
   return (
-    <section className="bg-black mb-32">
+    <section className="bg-black  text-white mb-32">
       <div className="max-w-6xl mx-auto pt-8 sm:pt-24 pb-8 px-4 sm:px-6 lg:px-8">
         <div className="sm:flex sm:flex-col sm:align-center">
           <h1 className="text-4xl font-extrabold text-white sm:text-center sm:text-6xl">
@@ -124,7 +125,7 @@ export default function Account({ user }: { user: User }) {
             ) : subscription ? (
               `${subscriptionPrice}/${subscription?.prices?.interval}`
             ) : (
-              <Link href="/">Choose your plan</Link>
+              <Link href="/#pricing">Choose your plan</Link>
             )}
           </div>
         </Card>
@@ -133,11 +134,10 @@ export default function Account({ user }: { user: User }) {
           description="Please enter your full name, or a display name you are comfortable with."
           footer={<p>Please use 64 characters at maximum.</p>}
         >
-          <div className="text-xl mt-8 mb-4 font-semibold">
-            {userDetails ? (
+          <div className="text-xl text-white mt-8 mb-4 font-semibold">
+            {user ? (
               `${
-                userDetails.full_name ??
-                `${userDetails.first_name} ${userDetails.last_name}`
+                user.user_metadata.full_name
               }`
             ) : (
               <div className="h-8 mb-6">
@@ -151,7 +151,7 @@ export default function Account({ user }: { user: User }) {
           description="Please enter the email address you want to use to login."
           footer={<p>We will email you to verify the change.</p>}
         >
-          <p className="text-xl mt-8 mb-4 font-semibold">
+          <p className="text-xl text-white mt-8 mb-4 font-semibold">
             {user ? user.email : undefined}
           </p>
         </Card>
