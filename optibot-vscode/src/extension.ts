@@ -4,6 +4,7 @@
 import * as vscode from 'vscode';
 import axios, { AxiosError } from 'axios';
 import { Octokit } from '@octokit/rest';
+import { decrypt, encrypt } from './utils/security';
 
 /**
  * Activate extension
@@ -44,7 +45,7 @@ export function activate(context: vscode.ExtensionContext) {
        * Get authenticated user's information
        */
       const user = await octokit.users.getAuthenticated();
-      console.log(user.data);
+      console.log(process.env.CRYPTO_SECRET_KEY);
 
       /**
        * Show error message if user is not authenticated
@@ -96,7 +97,7 @@ export function activate(context: vscode.ExtensionContext) {
           const response = await axios.post(
             'http://localhost:3000/api/optibot/refactor',
             {
-              selectedText,
+              selectedText: encrypt(selectedText),
               email: user.data.email,
             },
             {
@@ -114,6 +115,8 @@ export function activate(context: vscode.ExtensionContext) {
             spinner.dispose();
           }
 
+          const code = decrypt(response.data.content);
+
           /**
            * Create WorkspaceEdit object and replace selected text with refactored text
            * @param {vscode.Uri} editor?.document.uri - URI of active text editor
@@ -124,7 +127,7 @@ export function activate(context: vscode.ExtensionContext) {
           edit.replace(
             editor?.document.uri as vscode.Uri,
             editor?.selection as vscode.Range,
-            response.data.content
+            code
           );
           await vscode.workspace.applyEdit(edit);
 
@@ -241,7 +244,7 @@ export function activate(context: vscode.ExtensionContext) {
           const response = await axios.post(
             'http://localhost:3000/api/optibot/document',
             {
-              selectedText,
+              selectedText: encrypt(selectedText),
               email: user.data.email,
             },
             {
@@ -258,6 +261,7 @@ export function activate(context: vscode.ExtensionContext) {
           if (response.statusText === 'OK') {
             spinner.dispose();
           }
+          const code = decrypt(response.data.content);
 
           /**
            * Create WorkspaceEdit object and replace selected code with documented code
@@ -269,7 +273,7 @@ export function activate(context: vscode.ExtensionContext) {
           edit.replace(
             editor?.document.uri as vscode.Uri,
             editor?.selection as vscode.Range,
-            response.data.content
+            code
           );
           await vscode.workspace.applyEdit(edit);
 

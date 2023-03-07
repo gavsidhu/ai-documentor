@@ -1,5 +1,5 @@
 import { Database } from '@/types_db';
-import { removeCodeBlockWrappers } from '@/utils/helpers';
+import { decrypt, encrypt, removeCodeBlockWrappers } from '@/utils/helpers';
 import {
   checkIfUserExists,
   checkIfUserIsSubscribed
@@ -15,7 +15,6 @@ const openai = new OpenAIApi(configuration);
 
 const Document: NextApiHandler = async (req, res) => {
   const { selectedText, email } = req.body;
-
   try {
     const user = await checkIfUserExists(email);
     if (!user) {
@@ -40,6 +39,8 @@ const Document: NextApiHandler = async (req, res) => {
       });
     }
 
+    const code = decrypt(selectedText)
+
     const completion = await openai.createChatCompletion({
       model: 'gpt-3.5-turbo',
       messages: [
@@ -52,14 +53,16 @@ const Document: NextApiHandler = async (req, res) => {
           role: 'user',
           content:
             'Can you rewrite the following code with inline documentation using documentation syntax. Return the documented code without any additional text:\n' +
-            selectedText
+            code
         }
       ]
     });
+    const documentedCode = removeCodeBlockWrappers(
+      completion.data?.choices[0].message?.content as string
+    )
+    console.log(documentedCode)
     res.status(200).json({
-      content: removeCodeBlockWrappers(
-        completion.data?.choices[0].message?.content as string
-      )
+      content: encrypt(documentedCode)
     });
   } catch (error) {
     res.send(error);

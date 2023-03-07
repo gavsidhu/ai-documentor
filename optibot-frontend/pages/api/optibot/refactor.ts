@@ -1,4 +1,4 @@
-import { removeCodeBlockWrappers } from '@/utils/helpers';
+import { decrypt, encrypt, removeCodeBlockWrappers } from '@/utils/helpers';
 import {
   checkIfUserExists,
   checkIfUserIsSubscribed
@@ -37,6 +37,10 @@ const Refactor: NextApiHandler = async (req, res) => {
         message: 'Unauthorized.'
       });
     }
+
+    const code = decrypt(selectedText)
+
+
     const completion = await openai.createChatCompletion({
       model: 'gpt-3.5-turbo',
       messages: [
@@ -52,10 +56,14 @@ const Refactor: NextApiHandler = async (req, res) => {
         }
       ]
     });
+
+    const documentedCode = removeCodeBlockWrappers(
+      completion.data?.choices[0].message?.content as string
+    )
+
+
     res.status(200).json({
-      content: removeCodeBlockWrappers(
-        completion.data?.choices[0].message?.content as string
-      )
+      content: encrypt(documentedCode)
     });
   } catch (error) {
     console.log(error);
