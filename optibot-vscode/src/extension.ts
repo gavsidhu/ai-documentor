@@ -45,7 +45,6 @@ export function activate(context: vscode.ExtensionContext) {
        * Get authenticated user's information
        */
       const user = await octokit.users.getAuthenticated();
-      console.log(process.env.CRYPTO_SECRET_KEY);
 
       /**
        * Show error message if user is not authenticated

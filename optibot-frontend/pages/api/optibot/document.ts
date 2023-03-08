@@ -39,7 +39,7 @@ const Document: NextApiHandler = async (req, res) => {
       });
     }
 
-    const code = decrypt(selectedText)
+    const code = decrypt(selectedText);
 
     const completion = await openai.createChatCompletion({
       model: 'gpt-3.5-turbo',
@@ -59,13 +59,15 @@ const Document: NextApiHandler = async (req, res) => {
     });
     const documentedCode = removeCodeBlockWrappers(
       completion.data?.choices[0].message?.content as string
-    )
-    console.log(documentedCode)
+    );
+    console.log(documentedCode);
     res.status(200).json({
       content: encrypt(documentedCode)
     });
   } catch (error) {
-    res.send(error);
+    res.status(500).json({
+      msg: 'unexpected error'
+    });
   }
 };
 

@@ -38,8 +38,7 @@ const Refactor: NextApiHandler = async (req, res) => {
       });
     }
 
-    const code = decrypt(selectedText)
-
+    const code = decrypt(selectedText);
 
     const completion = await openai.createChatCompletion({
       model: 'gpt-3.5-turbo',
@@ -52,21 +51,23 @@ const Refactor: NextApiHandler = async (req, res) => {
         {
           role: 'user',
           content: `Refactor and optimize the following code to make it more readable, efficient and maintainable. Return the refactored code without any additional text:
-            ${selectedText}`
+            ${code}`
         }
       ]
     });
 
     const documentedCode = removeCodeBlockWrappers(
       completion.data?.choices[0].message?.content as string
-    )
-
+    );
 
     res.status(200).json({
       content: encrypt(documentedCode)
     });
   } catch (error) {
     console.log(error);
+    res.status(500).json({
+      msg: 'unexpected error'
+    });
   }
 };
 
