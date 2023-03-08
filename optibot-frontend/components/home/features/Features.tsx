@@ -17,35 +17,30 @@ const Features = () => {
       </div>
       <div className={styles.gridContainerCards}>
         <div className={styles.item1}>
-          <FeatureCard title='Document'>
-            <p>sadasddasd</p>
-          </FeatureCard>
+          <FeatureCard title='Document'
+            description='Say goodbye to the hassle of writing and maintaining documentation for your code! Easily add comments to your code, promoting good coding practices and improving readability and maintainability.'
+          />
         </div>
         <div className={styles.offsetCard}>
-          <FeatureCard title='Document'>
-            <p>sadasddasd</p>
-          </FeatureCard>
+          <FeatureCard title='Refactor'
+            description=' easily identify inefficient code and make improvements to ensure your code runs as efficiently and quickly as possible. Plus, with the ability to easily undo or redo changes, you can make larger-scale changes with confidence.'
+          />
         </div>
       </div>
       <div className={styles.gridContainer}>
         <div className="text-white text-center">
-          <div className="mt-4 sm:flex sm:items-center sm:justify-center sm:gap-4">
-            <h2 className="font-medium text-[30px]">Company Name</h2>
-
-            <span className="hidden sm:block sm:h-px sm:w-8 sm:bg-yellow-500"></span>
-
-            <p className="mt-0.5 opacity-50 sm:mt-0">Branding / Signage</p>
+          <div className="mt-4 px-8">
+            <h2 className="font-medium text-[30px]">Secure and Private</h2>
+            <p className="mt-4 text-left text-lg">We use encryption to protect your code throughout the entire process, ensuring that your code is never exposed to anyone else. We do not store your code or any other sensitive information, so you can use our extension with peace of mind.</p>
           </div>
         </div>
-        <div className="text-white">
-          <div className="mt-4 sm:flex sm:items-center sm:justify-center sm:gap-4">
-            <strong className="font-medium">Company Name</strong>
-
-            <span className="hidden sm:block sm:h-px sm:w-8 sm:bg-yellow-500"></span>
-
-            <p className="mt-0.5 opacity-50 sm:mt-0">Branding / Signage</p>
+        <div className="text-white text-center">
+          <div className="mt-4 px-8">
+            <h2 className="font-medium text-[30px]">Secure and Private</h2>
+            <p className="mt-4 text-left text-lg">We use encryption to protect your code throughout the entire process, ensuring that your code is never exposed to anyone else. We do not store your code or any other sensitive information, so you can use our extension with peace of mind.</p>
           </div>
         </div>
+
       </div>
     </div>
   )

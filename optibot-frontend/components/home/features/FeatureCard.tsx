@@ -2,9 +2,9 @@ import React from 'react'
 
 type CardProps = {
     title: string,
-    children: React.ReactNode
+    description: string
 }
-const FeatureCard = ({ title, children }: CardProps) => {
+const FeatureCard = ({ title, description }: CardProps) => {
     return (
         <div className="block text-white">
             <img
@@ -15,7 +15,7 @@ const FeatureCard = ({ title, children }: CardProps) => {
 
             <div className="mt-4 px-8">
                 <h2 className="font-medium">{title}</h2>
-                <p className="mt-4 text-left text-lg">{children}</p>
+                <p className="mt-4 text-left text-lg">{description}</p>
             </div>
 
 

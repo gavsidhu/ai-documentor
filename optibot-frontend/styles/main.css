@@ -50,3 +50,12 @@ a {
 .height-screen-helper {
   height: calc(100vh - 80px);
 }
+
+body {
+  position: relative;
+  background: linear-gradient(
+    149.36deg,
+    rgba(168, 99, 255, 0.2) 0%,
+    rgba(89, 170, 228, 0.2) 100%
+  );
+}
