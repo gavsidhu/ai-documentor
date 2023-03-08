@@ -3,8 +3,8 @@ import { GetStaticPropsResult } from 'next';
 import Pricing from '@/components/Pricing';
 import { getActiveProductsWithPrices } from '@/utils/supabase-client';
 import { Product } from 'types';
-import Hero from '@/components/home/hero/Hero';
 import Features from '@/components/home/features/Features';
+import Hero from '@/components/home/hero/Hero';
 
 interface Props {
   products: Product[];
