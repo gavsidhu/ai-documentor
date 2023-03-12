@@ -33,15 +33,17 @@ const Hero = () => {
 
                         </div>
                     </div>
+                    <div className='w-[75%] lg:w-[80%] mx-auto'>
                     <video
-                        src="optibot-demo.mp4"
+                        src="optibot-document-demo.mp4"
                         width={2432}
                         height={1442}
                         loop
                         autoPlay
                         muted
-                        className="mt-16 rounded-md bg-white/5 shadow-2xl ring-1 ring-white/10 sm:mt-24"
+                        className="mt-16 rounded-md bg-transparent shadow-2xl sm:mt-24"
                     />
+                    </div>
                 </div>
             </div>
         </section>

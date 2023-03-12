@@ -3,9 +3,10 @@ import React, { useRef } from 'react';
 type CardProps = {
     title: string;
     description: string;
+    video: string
 };
 
-const FeatureCard = ({ title, description }: CardProps) => {
+const FeatureCard = ({ title, description, video }: CardProps) => {
     const videoRef = useRef<HTMLVideoElement>(null);
 
     const handleMouseEnter = () => {
@@ -24,8 +25,8 @@ const FeatureCard = ({ title, description }: CardProps) => {
         <div className="block text-white" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
             <video
                 ref={videoRef}
-                src="optibot-demo.mp4"
-                className="h-56 w-full rounded-bl-3xl rounded-tr-3xl object-cover sm:h-64 lg:h-72"
+                src={video}
+                className="h-56 w-full rounded-md object-cover sm:h-64 lg:h-72"
                 loop
                 muted
             />
