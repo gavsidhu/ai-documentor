@@ -1,11 +1,12 @@
 {
   "name": "optibot",
-  "displayName": "optibot",
+  "displayName": "Optibot",
   "description": "",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.75.0"
   },
+  "publisher": "UplevelHQ",
   "categories": [
     "Other"
   ],

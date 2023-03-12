@@ -1,71 +1,34 @@
-# optibot README
+# Optibot
 
-This is the README for your extension "optibot". After writing up a brief description, we recommend including the following sections.
+Optibot is a Visual Studio Code extension that automatically generates documentation for your code and refactors inefficient code. With Optibot, you can easily improve the readability and efficiency of your codebase.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+Optibot provides the following features:
 
-For example if there is an image subfolder under your extension project workspace:
+-Automatic documentation generation: Optibot analyzes your code and generates documentation for it, making it easy for other developers to understand your codebase.
 
-\!\[feature X\]\(images/feature-x.png\)
+-Code refactoring: Optibot identifies inefficient code and automatically refactors it to improve performance.
+
+-VS Code integration: Optibot is fully integrated with Visual Studio Code, so you can easily use it within your existing development environment.
+
+\!\[Optibot Document action\]\(assets/optibot-document-clip.mp4\)
+\!\[Optibot Refactor in action\]\(assets/optibot-refactor-clip.mp4\)
 
 > Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+In order to use Optibot, create an account using your Github account at [Optibot](https://duckduckgo.com)
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+Optibot is still in development, so there may be some bugs or issues that need to be addressed. If you encounter any problems, please submit a bug report on the Optibot GitHub page.
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
-
 ### 1.0.0
 
-Initial release of ...
+Initial release of Optibot.
 
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+For more information about Optibot, please visit the Optibot GitHub page. Thank you for using Optibot!

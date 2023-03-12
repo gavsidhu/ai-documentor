@@ -146,10 +146,12 @@ export function activate(context: vscode.ExtensionContext) {
            * Display error message in console
            * @param {AxiosError} error - Error object received from Axios request
            */
-          if (error instanceof AxiosError) {
-            console.log(error.message);
+          if (axios.isAxiosError(error)) {
+            const axiosError = error as AxiosError;
+            vscode.window.showErrorMessage(`Error: ${axiosError.message}`);
+          } else {
+            vscode.window.showErrorMessage(`Error: ${error}`);
           }
-          console.log(error);
         }
       }
     }
@@ -189,15 +191,14 @@ export function activate(context: vscode.ExtensionContext) {
        * Get authenticated user's information
        */
       const user = await octokit.users.getAuthenticated();
-      console.log(user.data);
 
       /**
        * Show error message if user is not authenticated
-       * @param {string} You need to sign in to use AI Documentor - Error message displayed
+       * @param {string} You need to sign in to use Optibot - Error message displayed
        */
       if (!session) {
         vscode.window.showInformationMessage(
-          'You need to sign in to use AI Documentor'
+          'You need to sign in to use Optibot'
         );
         return;
       }
