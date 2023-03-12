@@ -60,13 +60,13 @@ const Document: NextApiHandler = async (req, res) => {
     const documentedCode = removeCodeBlockWrappers(
       completion.data?.choices[0].message?.content as string
     );
-    console.log(documentedCode);
     res.status(200).json({
       content: encrypt(documentedCode)
     });
   } catch (error) {
     res.status(500).json({
-      msg: 'unexpected error'
+      msg: 'Unexpected error',
+      error: error
     });
   }
 };

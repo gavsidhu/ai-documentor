@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import cn from 'classnames';
 
 import Button from '@/components/ui/Button';
 import { postData } from '@/utils/helpers';
@@ -87,9 +86,9 @@ export default function Pricing({ products }: Props) {
                         <span className="text-5xl font-extrabold text-white">{priceString}</span >
                         {product.id === productIds.standard ? <span className="text-sm font-semibold leading-6 tracking-wide text-white">/Month</span> : null}
                       </p>
-                      {product.id === productIds.standard ? <p className="mt-6 text-xs leading-5 text-white">
-                        Billed annually*
-                      </p> : <p className="mt-6 text-xs leading-5 text-white">
+                      {product.id === productIds.standard ? <p className="mt-6 text-sm leading-5 text-white">
+                        Billed annually
+                      </p> : <p className="mt-6 text-sm leading-5 text-white">
                         Pay once, own it forever
                       </p>}
                       <Button

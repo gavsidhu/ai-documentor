@@ -50,7 +50,7 @@ const Refactor: NextApiHandler = async (req, res) => {
         },
         {
           role: 'user',
-          content: `Refactor and optimize the following code to make it more readable, efficient and maintainable. Return the refactored code without any additional text:
+          content: `Refactor and optimize the following code to make it more efficient and readable:
             ${code}`
         }
       ]
