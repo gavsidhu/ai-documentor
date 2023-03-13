@@ -7,6 +7,7 @@ import { ThemeSupa } from '@supabase/auth-ui-shared';
 import LoadingDots from '@/components/ui/LoadingDots';
 import Logo from '@/components/icons/Logo';
 import { getURL } from '@/utils/helpers';
+import Link from 'next/link';
 
 const SignIn = () => {
   const router = useRouter();
@@ -24,7 +25,9 @@ const SignIn = () => {
       <div className="flex justify-center height-screen-helper">
         <div className="flex flex-col justify-between max-w-lg p-3 m-auto w-80 ">
           <div className="flex justify-center pb-12 ">
-            <Logo width="64px" height="64px" />
+          <Link href="/">
+            <h1 className='font-bold text-3xl text-white'>Optibot</h1>
+          </Link>
           </div>
           <div className="flex flex-col space-y-4">
             <Auth

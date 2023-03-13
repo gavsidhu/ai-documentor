@@ -65,7 +65,7 @@ const Document: NextApiHandler = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      msg: 'Unexpected error',
+      message: 'Unexpected error',
       error: error
     });
   }

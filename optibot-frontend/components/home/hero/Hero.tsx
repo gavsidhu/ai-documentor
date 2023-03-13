@@ -11,21 +11,21 @@ const Hero = () => {
                 <div className="mx-auto max-w-7xl px-6 lg:px-8">
                     <div className="mx-auto max-w-4xl text-center">
                         <h1 className="text-4xl leading-normal font-bold tracking-tight text-white sm:text-6xl sm:leading-normal">
-                            Instantly Write Cleaner and Better Code
+                            Instantly optimize your code
                         </h1>
+                        <p className='text-lg text-white mt-4'>OptiBot instantly generates documentation for your code and refactors inefficient code so you can focus on what really matters - building your project.</p>
                         <div className="mt-10">
                             {user ? (
                                 <a
                                     href="#"
-                                    className="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400"
-                                >
-                                    Get Optibot for VS Code
+                                    className="rounded-md bg-white bg-opacity-20 px-5 py-3.5 text-sm font-semibold text-white hover:shadow-sm hover:opacity-75"                                >
+                                    Install Optibot for VS Code
                                 </a>
 
                             ) : (
                                 <Link
                                     href="#"
-                                    className="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400"
+                                    className="rounded-md bg-white bg-opacity-20 px-5 py-3.5 text-sm font-semibold text-white hover:shadow-sm hover:opacity-75"
                                 >
                                     Get Started
                                 </Link>

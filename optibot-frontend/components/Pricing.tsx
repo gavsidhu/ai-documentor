@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 
-import Button from '@/components/ui/Button';
 import { postData } from '@/utils/helpers';
 import { getStripe } from '@/utils/stripe-client';
 import { useUser } from '@/utils/useUser';
@@ -44,15 +43,11 @@ export default function Pricing({ products }: Props) {
   };
   return (
     <section id='pricing' >
-      <div className="max-w-6xl mx-auto py-8 sm:py-24 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6x mx-auto py-8 sm:py-24 px-4 sm:px-6 lg:px-8">
         <div className="sm:flex sm:flex-col sm:align-center">
           <h1 className="text-4xl font-extrabold text-white sm:text-center sm:text-6xl">
             Pricing Plans
           </h1>
-          <p className="mt-5 text-xl text-zinc-200 sm:text-center sm:text-2xl max-w-2xl m-auto">
-            Start building for free, then add a site plan to go live. Account
-            plans unlock additional features.
-          </p>
         </div>
         <div className="mt-12 space-y-4 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-6 lg:max-w-4xl lg:mx-auto">
           {products.map((product) => {
@@ -77,8 +72,8 @@ export default function Pricing({ products }: Props) {
 
             return (
               <div key={product.id}>
-                <div className="bg-zinc-900 rounded-lg shadow-sm divide-y divide-zinc-600 -mt-2 p-2 lg:mt-0 lg:w-full lg:max-w-md lg:flex-shrink-0">
-                  <div className="rounded-2xl py-10 text-center ring-1 ring-inset ring-gray-900/5 lg:flex lg:flex-col lg:justify-center lg:py-16">
+                <div className="backdrop-blur bg-white/20 rounded-lg shadow-sm -mt-2 p-2 lg:mt-0 lg:w-full lg:max-w-md lg:flex-shrink-0">
+                  <div className="rounded-2xl py-10 text-center ring-1 ring-inset ring-white/5 lg:flex lg:flex-col lg:justify-center lg:py-16">
                     <div className="mx-auto max-w-xs px-8">
                       <h2 className="text-2xl leading-6 font-semibold text-white">{product.name}</h2>
                       <p className="mt-4 text-zinc-300">{product.description}</p>
@@ -91,19 +86,16 @@ export default function Pricing({ products }: Props) {
                       </p> : <p className="mt-6 text-sm leading-5 text-white">
                         Pay once, own it forever
                       </p>}
-                      <Button
-                        variant="slim"
+                      <button
                         type="button"
                         disabled={isLoading}
-                        loading={priceIdLoading === price.id}
                         onClick={() => handleCheckout(price)}
-                        className="mt-8 block w-full rounded-md py-2 text-sm font-semibold text-white text-center hover:bg-zinc-900"
-                      >
+                        className="mt-8 rounded-md bg-white bg-opacity-20 px-5 py-3.5 text-sm font-semibold text-white hover:shadow-sm hover:opacity-75"
+                        >
                         {product.name === subscription?.prices?.products?.name
                           ? 'Manage'
                           : 'Get Started'}
-                      </Button>
-
+                      </button>
                     </div>
                   </div>
                 </div>

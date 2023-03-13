@@ -25,14 +25,14 @@ const Features = () => {
           <FeatureCard
             title="Document"
             video="/optibot-document-clip.mp4"
-            description="Say goodbye to the hassle of writing and maintaining documentation for your code! Easily add comments to your code, promoting good coding practices and improving readability and maintainability."
+            description="Say goodbye to the hassle of writing and maintaining documentation for your code. Easily add comments to your code, promoting good coding practices and improving readability and maintainability."
           />
         </div>
         <div className={styles.offsetCard}>
           <FeatureCard
             title="Refactor"
             video="/optibot-refactor-clip.mp4"
-            description=" easily identify inefficient code and make improvements to ensure your code runs as efficiently and quickly as possible. Plus, with the ability to easily undo or redo changes, you can make larger-scale changes with confidence."
+            description=" Identify inefficient code and make improvements to ensure your code runs as efficiently and quickly as possible."
           />
         </div>
       </div>

@@ -3,18 +3,18 @@
 }
 
 .link {
-  @apply inline-flex items-center leading-6 font-medium transition ease-in-out duration-75 cursor-pointer text-zinc-200 rounded-md p-1;
+  @apply inline-flex items-center leading-6 font-medium transition ease-in-out duration-75 cursor-pointer text-white rounded-md p-1;
 }
 .linkMobile {
-  @apply block items-center leading-6 font-medium transition ease-in-out duration-75 cursor-pointer text-zinc-200 rounded-md p-1;
+  @apply block items-center leading-6 font-medium transition ease-in-out duration-75 cursor-pointer text-white rounded-md p-1;
 }
 
 .link:hover {
-  @apply text-zinc-100;
+  @apply text-gray-200;
 }
 
 .link:focus {
-  @apply outline-none text-zinc-100 ring-2 ring-pink-500 ring-opacity-50;
+  @apply outline-none text-white;
 }
 
 .logo {

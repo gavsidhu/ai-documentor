@@ -66,7 +66,8 @@ const Refactor: NextApiHandler = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({
-      msg: 'unexpected error'
+      msg: 'unexpected error',
+      error: error
     });
   }
 };
