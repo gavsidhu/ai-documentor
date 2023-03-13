@@ -241,6 +241,7 @@ export function activate(context: vscode.ExtensionContext) {
            * @param {Object} headers - Request headers
            * @param {string} "Content-Type": "application/json" - Request Content-Type
            */
+          console.log(process.env.SERVER_URL);
           const response = await axios.post(
             `${process.env.SERVER_URL}/api/optibot/document`,
             {
