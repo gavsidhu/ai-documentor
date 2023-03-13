@@ -88,13 +88,13 @@ export function activate(context: vscode.ExtensionContext) {
         try {
           /**
            * Send HTTP POST request to a local server for refactoring selected text
-           * @param {string} 'http://localhost:3000/api/optibot/refactor' - URL for HTTP request
+           * @param {string} 'api/optibot/refactor' - URL for HTTP request
            * @param {Object} {selectedText, email: user.data.email} - Request data
            * @param {Object} headers - Request headers
            * @param {string} "Content-Type": "application/json" - Request Content-Type
            */
           const response = await axios.post(
-            'http://localhost:3000/api/optibot/refactor',
+            `${process.env.SERVER_URL}/api/optibot/refactor`,
             {
               selectedText: encrypt(selectedText),
               email: user.data.email,
@@ -236,13 +236,13 @@ export function activate(context: vscode.ExtensionContext) {
         try {
           /**
            * Send HTTP POST request to a local server for documenting selected code
-           * @param {string} 'http://localhost:3000/api/optibot/document' - URL for HTTP request
+           * @param {string} 'api/optibot/document' - URL for HTTP request
            * @param {Object} {selectedText, email: user.data.email} - Request data
            * @param {Object} headers - Request headers
            * @param {string} "Content-Type": "application/json" - Request Content-Type
            */
           const response = await axios.post(
-            'http://localhost:3000/api/optibot/document',
+            `${process.env.SERVER_URL}/api/optibot/document`,
             {
               selectedText: encrypt(selectedText),
               email: user.data.email,
