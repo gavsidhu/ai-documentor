@@ -12,14 +12,12 @@ Optibot provides the following features:
 
 -VS Code integration: Optibot is fully integrated with Visual Studio Code, so you can easily use it within your existing development environment.
 
-\!\[Optibot Document action\]\(assets/optibot-document-clip.mp4\)
-\!\[Optibot Refactor in action\]\(assets/optibot-refactor-clip.mp4\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+![Optibot Document in action](https://www.optibot.io/optibot-document-clip.mp4)
+![Optibot Refactor in action](https://www.optibot.io/optibot-refactor-clip.mp4)
 
 ## Requirements
 
-In order to use Optibot, create an account using your Github account at [Optibot](https://duckduckgo.com)
+In order to use Optibot, create an account using your Github account at [Optibot](https://www.optibot.io)
 
 ## Known Issues
 
