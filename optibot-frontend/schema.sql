@@ -33,7 +33,7 @@ create trigger on_auth_user_created
   for each row execute procedure public.handle_new_user();
 
 /** 
-* USERS
+* Security keys
 * Note: This table contains security data. Users should only be able to view and update their own data.
 */
 create table security_keys (
@@ -44,17 +44,19 @@ alter table security_keys enable row level security;
 
 /**
 * This trigger automatically creates a user entry when a new user signs up via Supabase Auth and creates a security key for them.
+
+Add security key
 */ 
-  Add security key
+  
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS trigger AS $$
 DECLARE
-  user_email text;
+  user_email varchar;
   security_key bytea;
 BEGIN
   user_email := new.email;
   security_key := gen_random_bytes(32);
-  INSERT INTO public.user_security_keys (user_email, security_key)
+  INSERT INTO public.security_keys (user_email, security_key)
   VALUES (user_email, pgp_sym_encrypt(security_key, user_email));
   INSERT INTO public.users (id, email, full_name, avatar_url)
   VALUES (new.id, new.email, new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'avatar_url');
