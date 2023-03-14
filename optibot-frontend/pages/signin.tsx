@@ -32,7 +32,7 @@ const SignIn = () => {
             <Auth
               supabaseClient={supabaseClient}
               providers={['github']}
-              redirectTo={process.env.NEXT_PUBLIC_SITE_URL}
+              redirectTo={getURL()}
               magicLink={true}
               appearance={{
                 theme: ThemeSupa,

@@ -11,7 +11,7 @@ create table users (
   -- The customer's billing address, stored in JSON format.
   billing_address jsonb,
   -- Stores your customer's payment instruments.
-  payment_method jsonb
+  payment_method jsonb,
 );
 alter table users enable row level security;
 create policy "Can view own user data." on users for select using (auth.uid() = id);
@@ -25,6 +25,9 @@ returns trigger as $$
 begin
   insert into public.users (id, email, full_name, avatar_url)
   values (new.id, new.email, new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'avatar_url');
+
+  insert into public.security_keys (user_email, security_key)
+  values (new.email, encode(pgsodium.randombytes_buf(32), 'hex')::varchar);
   return new;
 end;
 $$ language plpgsql security definer;
@@ -38,36 +41,10 @@ create trigger on_auth_user_created
 */
 create table security_keys (
   user_email varchar not null unique primary key,
-  security_key bytea not null
+  security_key varchar not null
 );
 alter table security_keys enable row level security;
-
-/**
-* This trigger automatically creates a user entry when a new user signs up via Supabase Auth and creates a security key for them.
-
-Add security key
-*/ 
-  
-CREATE OR REPLACE FUNCTION public.handle_new_user()
-RETURNS trigger AS $$
-DECLARE
-  user_email varchar;
-  security_key bytea;
-BEGIN
-  user_email := new.email;
-  security_key := gen_random_bytes(32);
-  INSERT INTO public.security_keys (user_email, security_key)
-  VALUES (user_email, pgp_sym_encrypt(security_key, user_email));
-  INSERT INTO public.users (id, email, full_name, avatar_url)
-  VALUES (new.id, new.email, new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'avatar_url');
-  RETURN new;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
-CREATE TRIGGER on_auth_user_created
-AFTER INSERT ON auth.users
-FOR EACH ROW
-EXECUTE PROCEDURE public.handle_new_user();
+create policy "Can view own security data." on security_key for select using (true);
 
 /**
 * CUSTOMERS
