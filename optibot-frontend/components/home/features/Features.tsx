@@ -36,7 +36,7 @@ const Features = () => {
           />
         </div>
       </div>
-      <div className="text-white mt-24 py-24 sm:py-36">
+      {/* <div className="text-white mt-24 py-24 sm:py-36">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
@@ -56,7 +56,7 @@ const Features = () => {
             </dl>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
