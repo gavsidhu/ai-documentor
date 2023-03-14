@@ -94,7 +94,7 @@ export function activate(context: vscode.ExtensionContext) {
            * @param {string} "Content-Type": "application/json" - Request Content-Type
            */
           const response = await axios.post(
-            `${process.env.SERVER_URL}/api/optibot/refactor`,
+            `https://www.optibot.io/api/optibot/refactor`,
             {
               selectedText: encrypt(selectedText),
               email: user.data.email,
@@ -149,6 +149,8 @@ export function activate(context: vscode.ExtensionContext) {
           if (axios.isAxiosError(error)) {
             const axiosError = error as AxiosError;
             vscode.window.showErrorMessage(`Error: ${axiosError.message}`);
+          } else if (typeof error === 'object' && error !== null && 'response' in error && typeof error.response === 'object' && error.response !== null && 'data' in error.response && typeof error.response.data === 'object' && error.response.data !== null && 'message' in error.response.data) {
+            vscode.window.showErrorMessage(`Error: ${error.response.data.message}`);
           } else {
             vscode.window.showErrorMessage(`Error: ${error}`);
           }
@@ -241,9 +243,8 @@ export function activate(context: vscode.ExtensionContext) {
            * @param {Object} headers - Request headers
            * @param {string} "Content-Type": "application/json" - Request Content-Type
            */
-          console.log(process.env.SERVER_URL);
           const response = await axios.post(
-            `${process.env.SERVER_URL}/api/optibot/document`,
+            `https://www.optibot.io/api/optibot/document`,
             {
               selectedText: encrypt(selectedText),
               email: user.data.email,
@@ -294,9 +295,14 @@ export function activate(context: vscode.ExtensionContext) {
            * Display error message in console
            * @param {AxiosError} error - Error object received from Axios request
            */
+          console.log(error);
           if (axios.isAxiosError(error)) {
             const axiosError = error as AxiosError;
             vscode.window.showErrorMessage(`Error: ${axiosError.message}`);
+            console.log(error);
+            console.log(error.response?.data);
+          } else if (typeof error === 'object' && error !== null && 'response' in error && typeof error.response === 'object' && error.response !== null && 'data' in error.response && typeof error.response.data === 'object' && error.response.data !== null && 'message' in error.response.data) {
+            vscode.window.showErrorMessage(`Error: ${error.response.data.message}`);
           } else {
             vscode.window.showErrorMessage(`Error: ${error}`);
           }

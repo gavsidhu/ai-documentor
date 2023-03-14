@@ -10,7 +10,7 @@ const password = createHash('sha256')
   .update(String(process.env.CRYPTO_SECRET_KEY as string))
   .digest('base64')
   .substr(0, 32);
-  const iv = randomBytes(16)
+  const iv = randomBytes(16);
 
 export function encrypt(text: any) {
   let cipher = createCipheriv('aes-256-cbc', Buffer.from(password), iv);
