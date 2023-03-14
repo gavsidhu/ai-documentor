@@ -32,6 +32,41 @@ create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
 
+/** 
+* USERS
+* Note: This table contains security data. Users should only be able to view and update their own data.
+*/
+create table security_keys (
+  user_email varchar not null unique primary key,
+  security_key bytea not null
+);
+alter table security_keys enable row level security;
+
+/**
+* This trigger automatically creates a user entry when a new user signs up via Supabase Auth and creates a security key for them.
+*/ 
+  Add security key
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS trigger AS $$
+DECLARE
+  user_email text;
+  security_key bytea;
+BEGIN
+  user_email := new.email;
+  security_key := gen_random_bytes(32);
+  INSERT INTO public.user_security_keys (user_email, security_key)
+  VALUES (user_email, pgp_sym_encrypt(security_key, user_email));
+  INSERT INTO public.users (id, email, full_name, avatar_url)
+  VALUES (new.id, new.email, new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'avatar_url');
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER on_auth_user_created
+AFTER INSERT ON auth.users
+FOR EACH ROW
+EXECUTE PROCEDURE public.handle_new_user();
+
 /**
 * CUSTOMERS
 * Note: this is a private table that contains a mapping of user IDs to Stripe customer IDs.
