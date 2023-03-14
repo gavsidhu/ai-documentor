@@ -12,7 +12,7 @@
       "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
       "envFile": "${workspaceFolder}/.env",
       "outFiles": ["${workspaceFolder}/dist/**/*.js"],
-      "preLaunchTask": "${defaultBuildTask}"
+      "preLaunchTask": "${defaultBuildTask}",
     },
     {
       "name": "Extension Tests",
@@ -26,7 +26,7 @@
         "${workspaceFolder}/out/**/*.js",
         "${workspaceFolder}/dist/**/*.js"
       ],
-      "preLaunchTask": "tasks: watch-tests"
+      "preLaunchTask": "tasks: watch-tests",
     }
   ]
 }

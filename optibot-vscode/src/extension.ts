@@ -96,7 +96,7 @@ export function activate(context: vscode.ExtensionContext) {
           const response = await axios.post(
             `https://www.optibot.io/api/optibot/refactor`,
             {
-              selectedText: encrypt(selectedText),
+              selectedText: selectedText,
               email: user.data.email,
             },
             {
@@ -114,7 +114,7 @@ export function activate(context: vscode.ExtensionContext) {
             spinner.dispose();
           }
 
-          const code = decrypt(response.data.content);
+          const code = response.data.content;
 
           /**
            * Create WorkspaceEdit object and replace selected text with refactored text
@@ -246,7 +246,7 @@ export function activate(context: vscode.ExtensionContext) {
           const response = await axios.post(
             `https://www.optibot.io/api/optibot/document`,
             {
-              selectedText: encrypt(selectedText),
+              selectedText: selectedText,
               email: user.data.email,
             },
             {
@@ -263,7 +263,7 @@ export function activate(context: vscode.ExtensionContext) {
           if (response.statusText === 'OK') {
             spinner.dispose();
           }
-          const code = decrypt(response.data.content);
+          const code = response.data.content;
 
           /**
            * Create WorkspaceEdit object and replace selected code with documented code

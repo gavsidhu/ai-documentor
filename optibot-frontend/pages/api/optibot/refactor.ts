@@ -38,7 +38,7 @@ const Refactor: NextApiHandler = async (req, res) => {
       });
     }
 
-    const code = decrypt(selectedText);
+    const code = selectedText;
 
     const completion = await openai.createChatCompletion({
       model: 'gpt-3.5-turbo',
@@ -61,7 +61,7 @@ const Refactor: NextApiHandler = async (req, res) => {
     );
 
     res.status(200).json({
-      content: encrypt(documentedCode)
+      content: documentedCode
     });
   } catch (error) {
     console.log(error);
