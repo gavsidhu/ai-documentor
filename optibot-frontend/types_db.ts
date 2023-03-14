@@ -90,6 +90,43 @@ export interface Database {
           name?: string | null
         }
       }
+      requests: {
+        Row: {
+          created_at: string | null
+          request_data: string | null
+          request_id: number
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          request_data?: string | null
+          request_id?: number
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          request_data?: string | null
+          request_id?: number
+          status?: string | null
+          updated_at?: string | null
+        }
+      }
+      security_keys: {
+        Row: {
+          security_key: string
+          user_email: string
+        }
+        Insert: {
+          security_key: string
+          user_email: string
+        }
+        Update: {
+          security_key?: string
+          user_email?: string
+        }
+      }
       subscriptions: {
         Row: {
           cancel_at: string | null
