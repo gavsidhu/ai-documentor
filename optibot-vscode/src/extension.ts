@@ -156,9 +156,12 @@ export function activate(context: vscode.ExtensionContext) {
            * @param {AxiosError} error - Error object received from Axios request
            */
           spinner.dispose();
-          if (axios.isAxiosError(error)) {
+          console.log(error);
+          if (axios.isAxiosError(error) && 'response' in error) {
             const axiosError = error as AxiosError;
-            vscode.window.showErrorMessage(`Error: ${axiosError.message}`);
+            vscode.window.showErrorMessage(
+              `Error: ${axiosError.response?.data}`
+            );
           } else if (
             typeof error === 'object' &&
             error !== null &&
@@ -167,12 +170,9 @@ export function activate(context: vscode.ExtensionContext) {
             error.response !== null &&
             'data' in error.response &&
             typeof error.response.data === 'object' &&
-            error.response.data !== null &&
-            'message' in error.response.data
+            error.response.data !== null
           ) {
-            vscode.window.showErrorMessage(
-              `Error: ${error.response.data.message}`
-            );
+            vscode.window.showErrorMessage(`Error: ${error.response.data}`);
           } else {
             vscode.window.showErrorMessage(`Error: ${error}`);
           }
