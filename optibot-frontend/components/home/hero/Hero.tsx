@@ -13,7 +13,7 @@ const Hero = () => {
                         <h1 className="text-4xl leading-normal font-bold tracking-tight text-white sm:text-6xl sm:leading-normal">
                             Instantly optimize your code
                         </h1>
-                        <p className='text-lg text-white mt-4'>OptiBot instantly generates documentation for your code and refactors inefficient code so you can focus on what really matters - building your project.</p>
+                        <p className='text-lg text-white mt-4'>Optibot instantly generates documentation for your code and refactors inefficient code so you can focus on what really matters - building your project.</p>
                         <div className="mt-10">
                             {user ? (
                                 <Link
