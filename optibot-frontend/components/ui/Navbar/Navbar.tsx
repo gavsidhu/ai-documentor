@@ -7,6 +7,7 @@ import { useUser } from '@/utils/useUser';
 import s from './Navbar.module.css';
 import { Dialog } from '@headlessui/react';
 import { useState } from 'react';
+import Logo from '@/components/icons/Logo';
 const navigation = [
   { name: 'Pricing', href: '/#pricing' },
   { name: 'Account', href: '/account' },
@@ -24,7 +25,7 @@ const Navbar = () => {
       <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
         <div className="flex items-center gap-x-12">
           <Link href="/" className={s.logo}>
-            <h1 className='font-bold text-white'>Optibot</h1>
+            <Logo />
           </Link>
         </div>
         <div className="flex lg:hidden">
@@ -38,11 +39,11 @@ const Navbar = () => {
           </button>
         </div>
         <div className="hidden lg:flex lg:space-x-10">
-            {navigation.map((item) => (
-              <Link key={item.name} href={item.href} className={s.link}>
-                {item.name}
-              </Link>
-            ))}
+          {navigation.map((item) => (
+            <Link key={item.name} href={item.href} className={s.link}>
+              {item.name}
+            </Link>
+          ))}
           {user ? (
             <span
               className={s.link}
@@ -65,7 +66,7 @@ const Navbar = () => {
         <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-black px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center justify-between">
             <Link href="" className={s.logo}>
-            <h1 className='font-bold text-white'>Optibot</h1>
+              <h1 className='font-bold text-white'>Optibot</h1>
             </Link>
             <button
               type="button"
