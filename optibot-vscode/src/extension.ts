@@ -93,10 +93,19 @@ export function activate(context: vscode.ExtensionContext) {
            * @param {Object} headers - Request headers
            * @param {string} "Content-Type": "application/json" - Request Content-Type
            */
+
+          const key = await axios.post(
+            `https://www.optibot.io/api/optibot/get-key`,
+            {
+              email: user.data.email,
+            }
+          );
+          const encryptedText = encrypt(selectedText, key.data.key);
+
           const response = await axios.post(
             `https://www.optibot.io/api/optibot/refactor`,
             {
-              selectedText: selectedText,
+              selectedText: encryptedText,
               email: user.data.email,
             },
             {
@@ -114,7 +123,7 @@ export function activate(context: vscode.ExtensionContext) {
             spinner.dispose();
           }
 
-          const code = response.data.content;
+          const code = decrypt(response.data.content, key.data.key);
 
           /**
            * Create WorkspaceEdit object and replace selected text with refactored text
@@ -146,11 +155,24 @@ export function activate(context: vscode.ExtensionContext) {
            * Display error message in console
            * @param {AxiosError} error - Error object received from Axios request
            */
+          spinner.dispose();
           if (axios.isAxiosError(error)) {
             const axiosError = error as AxiosError;
             vscode.window.showErrorMessage(`Error: ${axiosError.message}`);
-          } else if (typeof error === 'object' && error !== null && 'response' in error && typeof error.response === 'object' && error.response !== null && 'data' in error.response && typeof error.response.data === 'object' && error.response.data !== null && 'message' in error.response.data) {
-            vscode.window.showErrorMessage(`Error: ${error.response.data.message}`);
+          } else if (
+            typeof error === 'object' &&
+            error !== null &&
+            'response' in error &&
+            typeof error.response === 'object' &&
+            error.response !== null &&
+            'data' in error.response &&
+            typeof error.response.data === 'object' &&
+            error.response.data !== null &&
+            'message' in error.response.data
+          ) {
+            vscode.window.showErrorMessage(
+              `Error: ${error.response.data.message}`
+            );
           } else {
             vscode.window.showErrorMessage(`Error: ${error}`);
           }
@@ -243,10 +265,19 @@ export function activate(context: vscode.ExtensionContext) {
            * @param {Object} headers - Request headers
            * @param {string} "Content-Type": "application/json" - Request Content-Type
            */
+
+          const key = await axios.post(
+            `https://www.optibot.io/api/optibot/get-key`,
+            {
+              email: user.data.email,
+            }
+          );
+          const encryptedText = encrypt(selectedText, key.data.key);
+
           const response = await axios.post(
             `https://www.optibot.io/api/optibot/document`,
             {
-              selectedText: selectedText,
+              selectedText: encryptedText,
               email: user.data.email,
             },
             {
@@ -263,7 +294,7 @@ export function activate(context: vscode.ExtensionContext) {
           if (response.statusText === 'OK') {
             spinner.dispose();
           }
-          const code = response.data.content;
+          const code = decrypt(response.data.content, key.data.key);
 
           /**
            * Create WorkspaceEdit object and replace selected code with documented code
@@ -295,14 +326,24 @@ export function activate(context: vscode.ExtensionContext) {
            * Display error message in console
            * @param {AxiosError} error - Error object received from Axios request
            */
-          console.log(error);
+          spinner.dispose();
           if (axios.isAxiosError(error)) {
             const axiosError = error as AxiosError;
             vscode.window.showErrorMessage(`Error: ${axiosError.message}`);
-            console.log(error);
-            console.log(error.response?.data);
-          } else if (typeof error === 'object' && error !== null && 'response' in error && typeof error.response === 'object' && error.response !== null && 'data' in error.response && typeof error.response.data === 'object' && error.response.data !== null && 'message' in error.response.data) {
-            vscode.window.showErrorMessage(`Error: ${error.response.data.message}`);
+          } else if (
+            typeof error === 'object' &&
+            error !== null &&
+            'response' in error &&
+            typeof error.response === 'object' &&
+            error.response !== null &&
+            'data' in error.response &&
+            typeof error.response.data === 'object' &&
+            error.response.data !== null &&
+            'message' in error.response.data
+          ) {
+            vscode.window.showErrorMessage(
+              `Error: ${error.response.data.message}`
+            );
           } else {
             vscode.window.showErrorMessage(`Error: ${error}`);
           }

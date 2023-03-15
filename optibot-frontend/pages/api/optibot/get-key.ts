@@ -9,22 +9,22 @@ const GetKey: NextApiHandler = async (req, res) => {
   if (req.method === 'POST') {
     try {
       const { email } = req.body;
-    const user = await checkIfUserExists(email);
-    if (!user) {
-      return res.status(400).json({
-        message:
-          'Please create an account at https://www.optibot.io/ to use Optibot'
-      });
-    }
+      const user = await checkIfUserExists(email);
+      if (!user) {
+        return res.status(400).json({
+          message:
+            'Please create an account at https://www.optibot.io/ to use Optibot'
+        });
+      }
 
-    const key = await getSecurityKey(email)
-    if (!key) {
-      return res.status(400).json({
-        message:
-          'Please create an account at https://www.optibot.io/ to use Optibot'
-      });
-    }
-    res.status(200).json({key})
+      const key = await getSecurityKey(email);
+      if (!key) {
+        return res.status(400).json({
+          message:
+            'Please create an account at https://www.optibot.io/ to use Optibot'
+        });
+      }
+      res.status(200).json({ key });
     } catch (error) {
       res.status(500).json({
         message: 'Unexpected error',

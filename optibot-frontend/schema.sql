@@ -44,7 +44,8 @@ create table security_keys (
   security_key varchar not null
 );
 alter table security_keys enable row level security;
-create policy "Can view own security data." on security_key for select using (true);
+create policy "Can view own security keys data." on security_keys for select using (auth.email() = user_email);
+create policy "Authenticated users only can view" on security_keys for select using (auth.role() = 'authenticated');
 
 /**
 * CUSTOMERS

@@ -2,7 +2,8 @@ import { Database } from '@/types_db';
 import { decrypt, encrypt, removeCodeBlockWrappers } from '@/utils/helpers';
 import {
   checkIfUserExists,
-  checkIfUserIsSubscribed
+  checkIfUserIsSubscribed,
+  getSecurityKey
 } from '@/utils/supabase-admin';
 import { NextApiHandler } from 'next';
 import { Configuration, OpenAIApi } from 'openai';
@@ -38,8 +39,16 @@ const Document: NextApiHandler = async (req, res) => {
         message: 'Unauthorized.'
       });
     }
+    const key = await getSecurityKey(email);
 
-    const code = selectedText;
+    if (!key) {
+      return res.status(400).json({
+        message:
+          'Please create an account at https://www.optibot.io/ to use Optibot'
+      });
+    }
+
+    const code = decrypt(selectedText, key as string);
 
     const completion = await openai.createChatCompletion({
       model: 'gpt-3.5-turbo',
@@ -61,7 +70,7 @@ const Document: NextApiHandler = async (req, res) => {
       completion.data?.choices[0].message?.content as string
     );
     res.status(200).json({
-      content: documentedCode
+      content: encrypt(documentedCode, key as string)
     });
   } catch (error) {
     res.status(500).json({

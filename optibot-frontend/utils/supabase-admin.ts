@@ -204,15 +204,15 @@ const checkIfUserIsSubscribed = async (
 
 export const getSecurityKey = async (email: string) => {
   const { data } = await supabaseAdmin
-  .from('security_keys')
-  .select()
-  .eq('user_email', email);
+    .from('security_keys')
+    .select()
+    .eq('user_email', email);
 
-if (!data || data.length === 0) {
-  return null;
-}
-return data[0].security_key;
-}
+  if (!data || data.length === 0) {
+    return null;
+  }
+  return data[0].security_key;
+};
 
 export {
   upsertProductRecord,
