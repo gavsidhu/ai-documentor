@@ -18,34 +18,39 @@ const Refactor: NextApiHandler = async (req, res) => {
   try {
     const user = await checkIfUserExists(email);
     if (!user) {
-      return res.status(400).json({
-        message:
+      return res
+        .status(400)
+        .send(
           'Please create an account at https://www.optibot.io/ to use Optibot'
-      });
+        );
     }
 
     const subscription = await checkIfUserIsSubscribed(user);
 
     if (!subscription) {
-      return res.status(400).json({
-        message:
-          'Please subscribe to a plan at https://www.optibot.io/ use Optibot'
-      });
+      return res
+        .status(400)
+        .send(
+          'Please create an account at https://www.optibot.io/ to use Optibot'
+        );
     }
 
     if (user?.email != email || subscription.status != 'active') {
-      return res.status(400).json({
-        message: 'Unauthorized.'
-      });
+      return res
+        .status(400)
+        .send(
+          'Unauthorized. Please subscribe to a plan at https://www.optibot.io/'
+        );
     }
 
     const key = await getSecurityKey(email);
 
     if (!key) {
-      return res.status(400).json({
-        message:
+      return res
+        .status(400)
+        .send(
           'Please create an account at https://www.optibot.io/ to use Optibot'
-      });
+        );
     }
 
     const code = decrypt(selectedText, key as string);
@@ -74,11 +79,7 @@ const Refactor: NextApiHandler = async (req, res) => {
       content: encrypt(documentedCode, key as string)
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      msg: 'unexpected error',
-      error: error
-    });
+    res.status(500).send('Unexpected error');
   }
 };
 
