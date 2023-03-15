@@ -12,8 +12,8 @@ Optibot provides the following features:
 
 -VS Code integration: Optibot is fully integrated with Visual Studio Code, so you can easily use it within your existing development environment.
 
-![Optibot Document in action](https://www.optibot.io/optibot-document-clip.mp4)
-![Optibot Refactor in action](https://www.optibot.io/optibot-refactor-clip.mp4)
+![Optibot Document in action](https://www.optibot.io/document-demo.gif)
+![Optibot Refactor in action](https://www.optibot.io/refactor-demo.gif)
 
 ## Requirements
 
