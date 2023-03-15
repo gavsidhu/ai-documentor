@@ -6,10 +6,10 @@ import GitHub from '@/components/icons/GitHub';
 import s from './Footer.module.css';
 const navigation = {
   main: [
-    { name: 'Home', href: '#' },
-    { name: 'Account', href: '#' },
-    { name: 'Contact', href: '#' },
-    { name: 'Install for VS Code', href: '#' },
+    { name: 'Home', href: '/' },
+    { name: 'Account', href: '/account' },
+    { name: 'Contact', href: 'mailto:gavin.sidhu@uplevelhq.com' },
+    { name: 'Install for VS Code', href: 'https://marketplace.visualstudio.com/items?itemName=UplevelHQ.optibot' },
   ],
   // social: [
   //   {
