@@ -208,7 +208,7 @@ const addSuccessfulPayment = async (
     checkout_status: checkoutSession.status,
     payment_status: checkoutSession.payment_status,
     metadata: checkoutSession.metadata,
-    price: price,
+    price_id: price,
     quantity: quantity,
     created: paymentIntent.created
   });
