@@ -2,7 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import Stripe from 'stripe';
 
 import { stripe } from './stripe';
-import { toDateTime } from './helpers';
+import { encrypt, toDateTime } from './helpers';
 
 import { Customer, UserDetails, Price, Product } from 'types';
 import type { Database } from 'types_db';
@@ -177,6 +177,49 @@ const manageSubscriptionStatusChange = async (
     );
 };
 
+const addSuccessfulPayment = async (
+  checkoutSessionId: string,
+  paymentIntentId: string,
+  customerId: string
+) => {
+  // Get customer's UUID from mapping table.
+  const { data: customerData, error: noCustomerError } = await supabaseAdmin
+    .from('customers')
+    .select('id')
+    .eq('stripe_customer_id', customerId)
+    .single();
+  if (noCustomerError) throw noCustomerError;
+
+  const { id: uuid } = customerData!;
+
+  const checkoutSession = await stripe.checkout.sessions.retrieve(
+    checkoutSessionId,
+    {
+      expand: ['line_items ']
+    }
+  );
+  const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+  const price = checkoutSession.line_items?.data[0].price?.id;
+  const quantity = checkoutSession.line_items?.data[0].quantity;
+
+  const { error } = await supabaseAdmin.from('payments').insert({
+    id: paymentIntentId,
+    user_id: uuid,
+    checkout_session_id: checkoutSessionId,
+    payment_intent_status: paymentIntent.status,
+    checkout_status: checkoutSession.status,
+    payment_status: checkoutSession.payment_status,
+    metadata: checkoutSession.metadata,
+    price: price,
+    quantity: quantity,
+    created: paymentIntent.created
+  });
+  if (error) throw error;
+  console.log(
+    `Inserted/updated subscription [${paymentIntentId}] for user [${uuid}]`
+  );
+};
+
 const checkIfUserExists = async (email: string) => {
   const { data } = await supabaseAdmin
     .from('users')
@@ -202,7 +245,21 @@ const checkIfUserIsSubscribed = async (
   return data[0];
 };
 
-export const getSecurityKey = async (email: string) => {
+const checkIfUserPaid = async (
+  user: Database['public']['Tables']['users']['Row']
+) => {
+  const { data } = await supabaseAdmin
+    .from('payments')
+    .select('payment_status')
+    .eq('user_id', user?.id);
+  console.log('data: ', data);
+  if (!data) {
+    return null;
+  }
+  return data[0];
+};
+
+const getSecurityKey = async (email: string) => {
   const { data } = await supabaseAdmin
     .from('security_keys')
     .select()
@@ -214,11 +271,46 @@ export const getSecurityKey = async (email: string) => {
   return data[0].security_key;
 };
 
+const addApiKey = async (apiKey: string, userId: string) => {
+  const encryptedKey = encrypt(
+    apiKey,
+    process.env.API_ENCRYPT_PASSWORD as string
+  );
+  const { data } = await supabaseAdmin
+    .from('api_keys')
+    .insert({ user_id: userId, api_key: encryptedKey });
+};
+
+const removeApiKey = async (userId: string) => {
+  const { data } = await supabaseAdmin
+    .from('api_keys')
+    .delete()
+    .eq('user_id', userId);
+};
+
+const getApiKey = async (userId: string) => {
+  const { data } = await supabaseAdmin
+    .from('api_keys')
+    .select()
+    .eq('user_id', userId);
+  console.log('api key: ', data);
+  if (!data || data.length === 0) {
+    return null;
+  }
+  return data[0].api_key;
+};
+
 export {
   upsertProductRecord,
   upsertPriceRecord,
   createOrRetrieveCustomer,
   manageSubscriptionStatusChange,
   checkIfUserExists,
-  checkIfUserIsSubscribed
+  checkIfUserIsSubscribed,
+  getSecurityKey,
+  addApiKey,
+  removeApiKey,
+  getApiKey,
+  addSuccessfulPayment,
+  checkIfUserPaid
 };
