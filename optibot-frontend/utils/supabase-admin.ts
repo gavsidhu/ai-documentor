@@ -209,8 +209,7 @@ const addSuccessfulPayment = async (
     payment_status: checkoutSession.payment_status,
     metadata: checkoutSession.metadata,
     price_id: price,
-    quantity: quantity,
-    created: paymentIntent.created
+    quantity: quantity
   });
   if (error) throw error;
   console.log(
