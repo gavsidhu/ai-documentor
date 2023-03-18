@@ -88,7 +88,7 @@ const webhookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
             }
             if (checkoutSession.mode === 'payment') {
               await addSuccessfulPayment(
-                checkoutSession.id,
+                checkoutSession,
                 checkoutSession.payment_intent as string,
                 checkoutSession.customer as string
               );

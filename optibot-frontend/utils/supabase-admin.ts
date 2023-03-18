@@ -178,7 +178,7 @@ const manageSubscriptionStatusChange = async (
 };
 
 const addSuccessfulPayment = async (
-  checkoutSessionId: string,
+  checkoutSession: Stripe.Checkout.Session,
   paymentIntentId: string,
   customerId: string
 ) => {
@@ -191,12 +191,10 @@ const addSuccessfulPayment = async (
   if (noCustomerError) throw noCustomerError;
 
   const { id: uuid } = customerData!;
+  console.log('checkout session: ', checkoutSession);
 
-  const checkoutSession = await stripe.checkout.sessions.retrieve(
-    checkoutSessionId
-  );
   const lineItems = await stripe.checkout.sessions.listLineItems(
-    checkoutSessionId
+    checkoutSession.id
   );
   const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
   const price = lineItems.data[0].price?.id;
@@ -205,7 +203,7 @@ const addSuccessfulPayment = async (
   const { error } = await supabaseAdmin.from('payments').insert({
     id: paymentIntentId,
     user_id: uuid,
-    checkout_session_id: checkoutSessionId,
+    checkout_session_id: checkoutSession.id,
     payment_intent_status: paymentIntent.status,
     checkout_status: checkoutSession.status,
     payment_status: checkoutSession.payment_status,
