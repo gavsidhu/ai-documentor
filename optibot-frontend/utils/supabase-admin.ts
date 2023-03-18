@@ -2,7 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import Stripe from 'stripe';
 
 import { stripe } from './stripe';
-import { encrypt, toDateTime } from './helpers';
+import { decrypt, encrypt, toDateTime } from './helpers';
 
 import { Customer, UserDetails, Price, Product } from 'types';
 import type { Database } from 'types_db';
@@ -294,7 +294,12 @@ const getApiKey = async (userId: string) => {
   if (!data || data.length === 0) {
     return null;
   }
-  return data[0].api_key;
+  const decryptedKey = decrypt(
+    data[0].api_key,
+    process.env.API_ENCRYPT_PASSWORD as string
+  );
+  console.log(decryptedKey);
+  return decryptedKey;
 };
 
 export {
