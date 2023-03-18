@@ -193,14 +193,14 @@ const addSuccessfulPayment = async (
   const { id: uuid } = customerData!;
 
   const checkoutSession = await stripe.checkout.sessions.retrieve(
-    checkoutSessionId,
-    {
-      expand: ['line_items ']
-    }
+    checkoutSessionId
+  );
+  const lineItems = await stripe.checkout.sessions.listLineItems(
+    checkoutSessionId
   );
   const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
-  const price = checkoutSession.line_items?.data[0].price?.id;
-  const quantity = checkoutSession.line_items?.data[0].quantity;
+  const price = lineItems.data[0].price?.id;
+  const quantity = lineItems.data[0].quantity;
 
   const { error } = await supabaseAdmin.from('payments').insert({
     id: paymentIntentId,
