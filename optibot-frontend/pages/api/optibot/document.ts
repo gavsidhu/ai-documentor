@@ -8,8 +8,25 @@ import {
 } from '@/utils/supabase-admin';
 import { NextApiHandler } from 'next';
 import { Configuration, OpenAIApi } from 'openai';
+import {
+  applyMiddlewareCustom,
+  getRateLimitMiddlewares
+} from '@/utils/applyRateLimit';
+
+const middlewares = getRateLimitMiddlewares({ limit: 10 }).map(
+  applyMiddlewareCustom
+);
 
 const Document: NextApiHandler = async (req, res) => {
+  try {
+    for (const middleware of middlewares) {
+      await middleware(req, res);
+    }
+  } catch {
+    return res
+      .status(429)
+      .json({ message: 'Too Many Requests. Please try again later' });
+  }
   const { selectedText, email } = req.body;
   try {
     const user = await checkIfUserExists(email);
