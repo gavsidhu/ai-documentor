@@ -1,10 +1,11 @@
-import { useState, ReactNode } from 'react';
+import { useState, ReactNode, useEffect } from 'react';
 import Link from 'next/link';
 import { GetServerSidePropsContext } from 'next';
 import {
   createServerSupabaseClient,
   User
 } from '@supabase/auth-helpers-nextjs';
+import { supabase } from '@/utils/supabase-client';
 
 import LoadingDots from '@/components/ui/LoadingDots';
 import Button from '@/components/ui/Button';
@@ -55,7 +56,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     props: {
       initialSession: session,
       user: session.user,
-      count: count
+      count: count,
     }
   };
 };
@@ -154,21 +155,16 @@ export default function Account({ user, count }: { user: User, count: number | n
       </div>
       <div className="p-4">
         <Card
-          title="Your Plan"
-          description={
-            subscription
-              ? `You are currently on the ${subscription?.prices?.products?.name} plan.`
-              : ''
-          }
+          title="Manage Billing"
           footer={
             <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
               <p className="pb-4 sm:pb-0">
-                Manage your subscription.
+                Manage your billing.
               </p>
               <Button
                 variant="slim"
                 loading={loading}
-                disabled={loading || !subscription}
+                disabled={loading}
                 onClick={redirectToCustomerPortal}
               >
                 Open customer portal
@@ -176,17 +172,6 @@ export default function Account({ user, count }: { user: User, count: number | n
             </div>
           }
         >
-          <div className="text-xl mt-8 mb-4 font-semibold">
-            {isLoading ? (
-              <div className="h-12 mb-6">
-                <LoadingDots />
-              </div>
-            ) : subscription ? (
-              `${subscriptionPrice}/${subscription?.prices?.interval}`
-            ) : (
-              <Link href="/#pricing">Choose your plan</Link>
-            )}
-          </div>
         </Card>
         <Card
           title="Your Name"
