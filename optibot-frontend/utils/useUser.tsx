@@ -5,7 +5,8 @@ import {
   User
 } from '@supabase/auth-helpers-react';
 
-import { UserDetails, Subscription } from 'types';
+import { UserDetails, Subscription, Payment } from 'types';
+import { Database } from '@/types_db';
 
 type UserContextType = {
   accessToken: string | null;
@@ -13,6 +14,7 @@ type UserContextType = {
   userDetails: UserDetails | null;
   isLoading: boolean;
   subscription: Subscription | null;
+  payment: Payment | null;
 };
 
 export const UserContext = createContext<UserContextType | undefined>(
@@ -34,7 +36,7 @@ export const MyUserContextProvider = (props: Props) => {
   const [isLoadingData, setIsloadingData] = useState(false);
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
   const [subscription, setSubscription] = useState<Subscription | null>(null);
-  const [paid, setPaid] = useState<boolean | null>(null);
+  const [payment, setPayment] = useState<Payment| null>(null);
 
   const getUserDetails = () => supabase.from('users').select('*').single();
   const getSubscription = () =>
@@ -58,7 +60,6 @@ export const MyUserContextProvider = (props: Props) => {
           const userDetailsPromise = results[0];
           const subscriptionPromise = results[1];
           const paymentPromise = results[0];
-          console.log(paymentPromise)
 
           if (userDetailsPromise.status === 'fulfilled')
             setUserDetails(userDetailsPromise.value.data as UserDetails);
@@ -66,8 +67,8 @@ export const MyUserContextProvider = (props: Props) => {
           if (subscriptionPromise.status === 'fulfilled')
             setSubscription(subscriptionPromise.value.data as Subscription);
 
-          if (paymentPromise.payment_status === 'paid')
-            setPaid(true);
+          if (paymentPromise.status  === 'fulfilled')
+            setPayment(paymentPromise.value.data as Payment);
 
           setIsloadingData(false);
         }
@@ -83,7 +84,8 @@ export const MyUserContextProvider = (props: Props) => {
     user,
     userDetails,
     isLoading: isLoadingUser || isLoadingData,
-    subscription
+    subscription,
+    payment
   };
 
   return <UserContext.Provider value={value} {...props} />;

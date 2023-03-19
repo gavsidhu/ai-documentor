@@ -1,4 +1,5 @@
 import Stripe from 'stripe';
+import { Database } from './types_db';
 export interface PageMeta {
   title: string;
   description: string;
@@ -67,4 +68,17 @@ export interface Subscription {
   trial_start?: string;
   trial_end?: string;
   prices?: Price;
+}
+
+export interface Payment  {
+  id: string /* primary key */;
+  user_id: string;
+  payment_status: string;
+  checkout_session_id: string;
+  payment_intent_status: string;
+  checkout_status: string;
+  metadata?: Stripe.Metadata;
+  price_id?: string /* foreign key to prices.id */;
+  quantity: number
+  created: string;
 }

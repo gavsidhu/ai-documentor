@@ -65,7 +65,8 @@ export default function Account({ user, count }: { user: User, count: number | n
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [apiKey, setApiKey] = useState("");
-  const { isLoading, subscription, userDetails } = useUser();
+  const { isLoading, subscription, payment } = useUser();
+  console.log(payment)
 
   const redirectToCustomerPortal = async () => {
     setLoading(true);
