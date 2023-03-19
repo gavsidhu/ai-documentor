@@ -14,10 +14,8 @@ interface Props {
 }
 
 const includedFeatures = [
-  'Private forum access',
-  'Member resources',
-  'Entry to annual conference',
-  'Official member t-shirt',
+  'Document',
+  'Refactor',
 ]
 
 export default function Pricing({ products }: Props) {
