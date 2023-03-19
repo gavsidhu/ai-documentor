@@ -9,6 +9,20 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      api_keys: {
+        Row: {
+          api_key: Json
+          user_id: string
+        }
+        Insert: {
+          api_key: Json
+          user_id: string
+        }
+        Update: {
+          api_key?: Json
+          user_id?: string
+        }
+      }
       customers: {
         Row: {
           id: string
@@ -21,6 +35,54 @@ export interface Database {
         Update: {
           id?: string
           stripe_customer_id?: string | null
+        }
+      }
+      payments: {
+        Row: {
+          checkout_session_id: string | null
+          checkout_status: Database["public"]["Enums"]["checkout_status"] | null
+          created: string
+          id: string
+          metadata: Json | null
+          payment_intent_status:
+            | Database["public"]["Enums"]["payment_intent_status"]
+            | null
+          payment_status: Database["public"]["Enums"]["payment_status"] | null
+          price_id: string | null
+          quantity: number | null
+          user_id: string
+        }
+        Insert: {
+          checkout_session_id?: string | null
+          checkout_status?:
+            | Database["public"]["Enums"]["checkout_status"]
+            | null
+          created?: string
+          id: string
+          metadata?: Json | null
+          payment_intent_status?:
+            | Database["public"]["Enums"]["payment_intent_status"]
+            | null
+          payment_status?: Database["public"]["Enums"]["payment_status"] | null
+          price_id?: string | null
+          quantity?: number | null
+          user_id: string
+        }
+        Update: {
+          checkout_session_id?: string | null
+          checkout_status?:
+            | Database["public"]["Enums"]["checkout_status"]
+            | null
+          created?: string
+          id?: string
+          metadata?: Json | null
+          payment_intent_status?:
+            | Database["public"]["Enums"]["payment_intent_status"]
+            | null
+          payment_status?: Database["public"]["Enums"]["payment_status"] | null
+          price_id?: string | null
+          quantity?: number | null
+          user_id?: string
         }
       }
       prices: {
@@ -90,25 +152,25 @@ export interface Database {
           name?: string | null
         }
       }
-      requests: {
+      queue: {
         Row: {
           created_at: string | null
-          request_data: string | null
-          request_id: number
+          id: number
+          payload: string | null
           status: string | null
           updated_at: string | null
         }
         Insert: {
           created_at?: string | null
-          request_data?: string | null
-          request_id?: number
+          id?: number
+          payload?: string | null
           status?: string | null
           updated_at?: string | null
         }
         Update: {
           created_at?: string | null
-          request_data?: string | null
-          request_id?: number
+          id?: number
+          payload?: string | null
           status?: string | null
           updated_at?: string | null
         }
@@ -214,6 +276,16 @@ export interface Database {
       [_ in never]: never
     }
     Enums: {
+      checkout_status: "open" | "complete" | "expired"
+      payment_intent_status:
+        | "requires_payment_method"
+        | "requires_confirmation"
+        | "requires_action"
+        | "processing"
+        | "requires_capture"
+        | "canceled"
+        | "succeeded"
+      payment_status: "paid" | "unpaid" | "no_payment_required"
       pricing_plan_interval: "day" | "week" | "month" | "year"
       pricing_type: "one_time" | "recurring"
       subscription_status:
