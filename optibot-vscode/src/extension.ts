@@ -5,6 +5,7 @@ import * as vscode from 'vscode';
 import axios, { AxiosError } from 'axios';
 import { Octokit } from '@octokit/rest';
 import { decrypt, encrypt } from './utils/security';
+import { getKey } from './utils/helpers';
 
 /**
  * Activate extension
@@ -67,7 +68,7 @@ export function activate(context: vscode.ExtensionContext) {
         const spinner = vscode.window.createStatusBarItem(
           vscode.StatusBarAlignment.Left
         );
-        spinner.text = '$(sync~spin) Loading...';
+        spinner.text = '$(sync~spin) Refactoring...';
         spinner.show();
         // Get the current text editor
         const editor = vscode.window.activeTextEditor;
@@ -94,13 +95,8 @@ export function activate(context: vscode.ExtensionContext) {
            * @param {string} "Content-Type": "application/json" - Request Content-Type
            */
 
-          const key = await axios.post(
-            `https://www.optibot.io/api/optibot/get-key`,
-            {
-              email: user.data.email,
-            }
-          );
-          const encryptedText = encrypt(selectedText, key.data.key);
+          const key = await getKey(user.data.email as string);
+          const encryptedText = encrypt(selectedText, key);
 
           const response = await axios.post(
             `https://www.optibot.io/api/optibot/refactor`,
@@ -123,7 +119,7 @@ export function activate(context: vscode.ExtensionContext) {
             spinner.dispose();
           }
 
-          const code = decrypt(response.data.content, key.data.key);
+          const code = decrypt(response.data.content, key);
 
           /**
            * Create WorkspaceEdit object and replace selected text with refactored text
@@ -156,7 +152,6 @@ export function activate(context: vscode.ExtensionContext) {
            * @param {AxiosError} error - Error object received from Axios request
            */
           spinner.dispose();
-          console.log(error);
           if (axios.isAxiosError(error) && 'response' in error) {
             const axiosError = error as AxiosError;
             vscode.window.showErrorMessage(
@@ -239,7 +234,7 @@ export function activate(context: vscode.ExtensionContext) {
         const spinner = vscode.window.createStatusBarItem(
           vscode.StatusBarAlignment.Left
         );
-        spinner.text = '$(sync~spin) Loading...';
+        spinner.text = '$(sync~spin) Documenting...';
         spinner.show();
         // Get the current text editor
         const editor = vscode.window.activeTextEditor;
@@ -266,13 +261,9 @@ export function activate(context: vscode.ExtensionContext) {
            * @param {string} "Content-Type": "application/json" - Request Content-Type
            */
 
-          const key = await axios.post(
-            `https://www.optibot.io/api/optibot/get-key`,
-            {
-              email: user.data.email,
-            }
-          );
-          const encryptedText = encrypt(selectedText, key.data.key);
+          const key = await getKey(user.data.email as string);
+
+          const encryptedText = encrypt(selectedText, key);
 
           const response = await axios.post(
             `https://www.optibot.io/api/optibot/document`,
@@ -294,7 +285,7 @@ export function activate(context: vscode.ExtensionContext) {
           if (response.statusText === 'OK') {
             spinner.dispose();
           }
-          const code = decrypt(response.data.content, key.data.key);
+          const code = decrypt(response.data.content, key);
 
           /**
            * Create WorkspaceEdit object and replace selected code with documented code
@@ -322,6 +313,7 @@ export function activate(context: vscode.ExtensionContext) {
             success.dispose();
           }, 2500);
         } catch (error) {
+          console.log(error);
           /**
            * Display error message in console
            * @param {AxiosError} error - Error object received from Axios request
@@ -329,7 +321,9 @@ export function activate(context: vscode.ExtensionContext) {
           spinner.dispose();
           if (axios.isAxiosError(error)) {
             const axiosError = error as AxiosError;
-            vscode.window.showErrorMessage(`Error: ${axiosError.message}`);
+            vscode.window.showErrorMessage(
+              `Error: ${axiosError.response?.data}`
+            );
           } else if (
             typeof error === 'object' &&
             error !== null &&

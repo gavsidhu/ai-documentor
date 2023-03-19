@@ -24,7 +24,7 @@ const Hero = () => {
 
                             ) : (
                                 <Link
-                                    href="#"
+                                    href="/signin"
                                     className="rounded-md bg-white bg-opacity-20 px-5 py-3.5 text-sm font-semibold text-white hover:shadow-sm hover:opacity-75"
                                 >
                                     Get Started

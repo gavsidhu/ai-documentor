@@ -10,6 +10,9 @@ import LoadingDots from '@/components/ui/LoadingDots';
 import Button from '@/components/ui/Button';
 import { useUser } from '@/utils/useUser';
 import { postData } from '@/utils/helpers';
+import Modal from '@/components/ui/Modal';
+import axios from 'axios'
+import { url } from '@/constant/url';
 
 interface Props {
   title: string;
@@ -47,18 +50,22 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
       }
     };
 
+  const { count } = await supabase.from("api_keys").select('*', { count: "exact", head: true }).eq("user_id", session.user.id)
+  console.log(count)
   return {
     props: {
       initialSession: session,
-      user: session.user
+      user: session.user,
+      count: count
     }
   };
 };
 
-export default function Account({ user }: { user: User }) {
+export default function Account({ user, count }: { user: User, count: number | null }) {
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [apiKey, setApiKey] = useState("");
   const { isLoading, subscription, userDetails } = useUser();
-  console.log(user)
 
   const redirectToCustomerPortal = async () => {
     setLoading(true);
@@ -81,16 +88,67 @@ export default function Account({ user }: { user: User }) {
       minimumFractionDigits: 0
     }).format((subscription?.prices?.unit_amount || 0) / 100);
 
+  const addAPIKey = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    setLoading(true)
+    try {
+      const res = await axios.post(`${url}/api/api-key/add-api-key`, {
+        apiKey: apiKey,
+        userId: user.id
+      })
+      setLoading(false)
+      alert(res.data.message)
+    } catch (error) {
+      setLoading(false)
+      console.log(error)
+    }
+  }
+
+  const removeAPIKey = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    setLoading(true)
+    try {
+      const res = await axios.post(`${url}/api/api-key/remove-api-key`, {
+        apiKey: e.currentTarget.value,
+        userId: user.id
+      })
+      setLoading(false)
+      alert(res.data.message)
+    } catch (error) {
+      setLoading(false)
+      console.log(error)
+    }
+  }
+
   return (
     <section className="bg-black  text-white mb-32">
+      <Modal open={open} setOpen={setOpen}>
+        <div>
+          <h3 className='text-base font-semibold leading-6 text-white'>Add API Key</h3>
+          <form className="mt-6 sm:flex sm:max-w-md">
+            <input
+              type="text"
+              id="apiKey"
+              required
+              className="w-full min-w-0 appearance-none rounded-md border-0 bg-white/5 px-3 py-1.5 text-base text-white shadow-sm ring-1 ring-inset ring-white/10 placeholder:text-gray-500 sm:w-64 sm:text-sm sm:leading-6 xl:w-full"
+              placeholder="Enter OpenAI API Key"
+              onChange={(e) => setApiKey(e.currentTarget.value)}
+            />
+            <div className="mt-4 sm:mt-0 sm:ml-4 sm:flex-shrink-0">
+              <button
+                type="submit"
+                className="min-w-0 flex-auto border-0 bg-white text-zinc-800 transition ease-in-out duration-150 font-semibold text-center justify-center px-3.5 py-2  shadow-sm sm:text-sm sm:leading-6 hover:bg-zinc-800 hover:text-white hover:border-white"
+                onClick={(e) => addAPIKey(e)}
+              >
+                Add API Key
+              </button>
+            </div>
+          </form>
+        </div>
+      </Modal>
       <div className="max-w-6xl mx-auto pt-8 sm:pt-24 pb-8 px-4 sm:px-6 lg:px-8">
         <div className="sm:flex sm:flex-col sm:align-center">
           <h1 className="text-4xl font-extrabold text-white sm:text-center sm:text-6xl">
             Account
           </h1>
-          <p className="mt-5 text-xl text-zinc-200 sm:text-center sm:text-2xl max-w-2xl m-auto">
-            We partnered with Stripe for a simplified billing.
-          </p>
         </div>
       </div>
       <div className="p-4">
@@ -104,7 +162,7 @@ export default function Account({ user }: { user: User }) {
           footer={
             <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
               <p className="pb-4 sm:pb-0">
-                Manage your subscription on Stripe.
+                Manage your subscription.
               </p>
               <Button
                 variant="slim"
@@ -136,8 +194,7 @@ export default function Account({ user }: { user: User }) {
         >
           <div className="text-xl text-white mt-8 mb-4 font-semibold">
             {user ? (
-              `${
-                user.user_metadata.full_name
+              `${user.user_metadata.full_name
               }`
             ) : (
               <div className="h-8 mb-6">
@@ -154,6 +211,55 @@ export default function Account({ user }: { user: User }) {
           <p className="text-xl text-white mt-8 mb-4 font-semibold">
             {user ? user.email : undefined}
           </p>
+        </Card>
+        <Card
+          title="Your OpenAI API Key"
+          footer={
+            <div>
+              {count != 0 && count != null
+                ?
+                <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
+                  <p className="pb-4 sm:pb-0">
+                    Remove your API key
+                  </p>
+                  <Button
+                    variant="slim"
+                    loading={loading}
+                    disabled={loading}
+                    onClick={(e) => removeAPIKey(e)}
+                  >
+                    Remove API Key
+                  </Button>
+                </div>
+                :
+                <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
+                  <p className="pb-4 sm:pb-0">
+                    Add an API key
+                  </p>
+                  <Button
+                    variant="slim"
+                    loading={loading}
+                    disabled={loading}
+                    onClick={() => setOpen(true)}
+                  >
+                    Add API Key
+                  </Button>
+                </div>
+              }
+            </div>
+          }
+        >
+          <div className="text-xl mt-8 mb-4 font-semibold">
+            {isLoading ? (
+              <div className="h-12 mb-6">
+                <LoadingDots />
+              </div>
+            ) : (count !== 0 && count !== null) ? (
+              <p>****************</p>
+            ) : (
+              <p>No API Key</p>
+            )}
+          </div>
         </Card>
       </div>
     </section>

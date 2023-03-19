@@ -1,10 +1,9 @@
 import Stripe from 'stripe';
 
 export const stripe = new Stripe(
-  process.env.STRIPE_SECRET_KEY_DEV as string,
-  // process.env.NODE_ENV === 'development'
-  //   ? (process.env.STRIPE_SECRET_KEY_DEV as string)
-  //   : (process.env.STRIPE_SECRET_KEY as string),
+  process.env.NODE_ENV === 'development'
+    ? (process.env.STRIPE_SECRET_KEY_DEV as string)
+    : (process.env.STRIPE_SECRET_KEY as string),
   {
     // https://github.com/stripe/stripe-node#configuration
     apiVersion: '2022-11-15',

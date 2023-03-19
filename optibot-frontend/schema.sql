@@ -159,3 +159,46 @@ create policy "Can only view own subs data." on subscriptions for select using (
  */
 drop publication if exists supabase_realtime;
 create publication supabase_realtime for table products, prices;
+
+/**
+* Api Keys
+* OpenAI api keys
+*/
+create table api_keys (
+  user_id uuid references auth.users not null primary key,
+  api_key json not null
+);
+alter table api_keys enable row level security;
+create policy "Can view own api keys data." on api_keys for select using (auth.uid() = user_id);
+create policy "Authenticated users only can view" on api_keys for select using (auth.role() = 'authenticated');
+
+
+
+/**
+* Payments
+* Note: checkout sessions are created and managed in Stripe and synced to our DB via Stripe webhooks.
+*/
+create type payment_status as enum ('paid', 'unpaid', 'no_payment_required');
+create type checkout_status as enum ('open', 'complete', 'expired');
+create type payment_intent_status as enum ('requires_payment_method','requires_confirmation','requires_action','processing','requires_capture','canceled','succeeded' );
+create table payments (
+  -- payment_intent ID from Stripe, e.g. pi_1234.
+  id text primary key,
+  user_id uuid references auth.users not null,
+  checkout_session_id text,
+  -- The status of the payment intent object, one of payment_intent status type above.
+  payment_intent_status payment_intent_status,
+   -- The status of the checkout session object, one of checkout_status type above.
+  checkout_status checkout_status,
+  -- The status of the payment, one of payment_status type above.
+  payment_status payment_status,
+  -- Set of key-value pairs, used to store additional information about the object in a structured format.
+  metadata jsonb,
+  -- ID of the price that created this subscription.
+  price_id text references prices,
+  quantity integer,
+  -- Time at which the payment intent was created.
+  created timestamp with time zone default timezone('utc'::text, now()) not null
+);
+alter table payments enable row level security;
+create policy "Can only view own payments data." on payments for select using (auth.uid() = user_id);

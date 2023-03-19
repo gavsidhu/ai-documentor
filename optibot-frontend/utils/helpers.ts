@@ -6,13 +6,12 @@ import {
   randomBytes
 } from 'crypto';
 
-const iv = randomBytes(16);
-
 export const getURL = () => {
   let url =
-    process?.env?.NEXT_PUBLIC_SITE_URL ?? // Set this to your site URL in production env.
-    process?.env?.NEXT_PUBLIC_VERCEL_URL ?? // Automatically set by Vercel.
-    'http://localhost:3000/';
+    process.env.NODE_ENV === 'development'
+      ? 'http://localhost:3000/'
+      : (process?.env?.NEXT_PUBLIC_SITE_URL as string); // Set this to your site URL in production env.
+
   // Make sure to include `https://` when not localhost.
   url = url.includes('http') ? url : `https://${url}`;
   // Make sure to including trailing `/`.
@@ -65,15 +64,19 @@ export function fixKeyLength(password: string) {
     .substr(0, 32);
 }
 
-export function encrypt(text: any, password: string) {
+export function encrypt(text: string, password: string) {
   const newPassword = fixKeyLength(password);
+  const iv = randomBytes(16);
   let cipher = createCipheriv('aes-256-cbc', Buffer.from(newPassword), iv);
   let encrypted = cipher.update(text);
   encrypted = Buffer.concat([encrypted, cipher.final()]);
   return { iv: iv.toString('hex'), encryptedData: encrypted.toString('hex') };
 }
 
-export function decrypt(text: any, password: string) {
+export function decrypt(
+  text: { iv: string; encryptedData: string },
+  password: string
+) {
   const newPassword = fixKeyLength(password);
   let iv = Buffer.from(text.iv, 'hex');
   let encryptedText = Buffer.from(text.encryptedData, 'hex');

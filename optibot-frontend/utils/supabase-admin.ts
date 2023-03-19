@@ -249,7 +249,6 @@ const checkIfUserPaid = async (
     .from('payments')
     .select('payment_status')
     .eq('user_id', user?.id);
-  console.log('data: ', data);
   if (!data) {
     return null;
   }
@@ -290,7 +289,6 @@ const getApiKey = async (userId: string) => {
     .from('api_keys')
     .select()
     .eq('user_id', userId);
-  console.log('api key: ', data);
   if (!data || data.length === 0) {
     return null;
   }
@@ -298,7 +296,6 @@ const getApiKey = async (userId: string) => {
     data[0].api_key,
     process.env.API_ENCRYPT_PASSWORD as string
   );
-  console.log(decryptedKey);
   return decryptedKey;
 };
 
