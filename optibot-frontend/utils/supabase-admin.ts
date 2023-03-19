@@ -293,7 +293,7 @@ const getApiKey = async (userId: string) => {
     return null;
   }
   const decryptedKey = decrypt(
-    data[0].api_key,
+    data[0].api_key as { iv: string; encryptedData: string; },
     process.env.API_ENCRYPT_PASSWORD as string
   );
   return decryptedKey;
