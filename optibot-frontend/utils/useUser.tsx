@@ -6,7 +6,6 @@ import {
 } from '@supabase/auth-helpers-react';
 
 import { UserDetails, Subscription, Payment } from 'types';
-import { Database } from '@/types_db';
 
 type UserContextType = {
   accessToken: string | null;
@@ -59,7 +58,7 @@ export const MyUserContextProvider = (props: Props) => {
         (results) => {
           const userDetailsPromise = results[0];
           const subscriptionPromise = results[1];
-          const paymentPromise = results[0];
+          const paymentPromise = results[1];
 
           if (userDetailsPromise.status === 'fulfilled')
             setUserDetails(userDetailsPromise.value.data as UserDetails);
