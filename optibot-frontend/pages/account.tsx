@@ -65,8 +65,7 @@ export default function Account({ user, count }: { user: User, count: number | n
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [apiKey, setApiKey] = useState("");
-  const { isLoading, subscription, payment } = useUser();
-  console.log(payment)
+  const { isLoading, subscription } = useUser();
 
   const redirectToCustomerPortal = async () => {
     setLoading(true);
@@ -155,7 +154,7 @@ export default function Account({ user, count }: { user: User, count: number | n
         </div>
       </div>
       <div className="p-4">
-        <Card
+        {/* <Card
           title="Manage Billing"
           footer={
             <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
@@ -173,7 +172,7 @@ export default function Account({ user, count }: { user: User, count: number | n
             </div>
           }
         >
-        </Card>
+        </Card> */}
         <Card
           title="Your Name"
           description="Please enter your full name, or a display name you are comfortable with."

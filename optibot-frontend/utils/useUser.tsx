@@ -5,7 +5,7 @@ import {
   User
 } from '@supabase/auth-helpers-react';
 
-import { UserDetails, Subscription, Payment } from 'types';
+import { UserDetails, Subscription } from 'types';
 
 type UserContextType = {
   accessToken: string | null;
@@ -13,7 +13,6 @@ type UserContextType = {
   userDetails: UserDetails | null;
   isLoading: boolean;
   subscription: Subscription | null;
-  payment: Payment | null;
 };
 
 export const UserContext = createContext<UserContextType | undefined>(
@@ -35,8 +34,6 @@ export const MyUserContextProvider = (props: Props) => {
   const [isLoadingData, setIsloadingData] = useState(false);
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
   const [subscription, setSubscription] = useState<Subscription | null>(null);
-  const [payment, setPayment] = useState<Payment| null>(null);
-
   const getUserDetails = () => supabase.from('users').select('*').single();
   const getSubscription = () =>
     supabase
@@ -44,30 +41,22 @@ export const MyUserContextProvider = (props: Props) => {
       .select('*, prices(*, products(*))')
       .in('status', ['trialing', 'active'])
       .single();
-  const getPayment = () =>
-    supabase
-      .from('payments')
-      .select('*')
-      .eq("user_id", user?.id)
-      .single();
 
   useEffect(() => {
     if (user && !isLoadingData && !userDetails && !subscription) {
       setIsloadingData(true);
-      Promise.allSettled([getUserDetails(), getSubscription(), getPayment()]).then(
+      Promise.allSettled([getUserDetails(), getSubscription()]).then(
         (results) => {
           const userDetailsPromise = results[0];
           const subscriptionPromise = results[1];
-          const paymentPromise = results[1];
+          const paymentPromise = results[0];
+          console.log(paymentPromise)
 
           if (userDetailsPromise.status === 'fulfilled')
             setUserDetails(userDetailsPromise.value.data as UserDetails);
 
           if (subscriptionPromise.status === 'fulfilled')
             setSubscription(subscriptionPromise.value.data as Subscription);
-
-          if (paymentPromise.status  === 'fulfilled')
-            setPayment(paymentPromise.value.data as Payment);
 
           setIsloadingData(false);
         }
@@ -83,8 +72,7 @@ export const MyUserContextProvider = (props: Props) => {
     user,
     userDetails,
     isLoading: isLoadingUser || isLoadingData,
-    subscription,
-    payment
+    subscription
   };
 
   return <UserContext.Provider value={value} {...props} />;
