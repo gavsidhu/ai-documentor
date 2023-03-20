@@ -85,3 +85,19 @@ export function decrypt(
   decrypted = Buffer.concat([decrypted, decipher.final()]);
   return decrypted.toString();
 }
+
+export function filterWordsFromFirstLine(
+  originalString: string,
+  wordsToRemove: string[]
+): string {
+  let lines: string[] = originalString.split('\n');
+  let firstLineWords: string[] = lines[0].split(/\s+/);
+
+  if (wordsToRemove.includes(firstLineWords[0].toLowerCase())) {
+    firstLineWords = firstLineWords.slice(1);
+  }
+
+  lines[0] = firstLineWords.join(' ');
+
+  return lines.join('\n');
+}

@@ -1,5 +1,10 @@
 import { Database } from '@/types_db';
-import { decrypt, encrypt, removeCodeBlockWrappers } from '@/utils/helpers';
+import {
+  decrypt,
+  encrypt,
+  filterWordsFromFirstLine,
+  removeCodeBlockWrappers
+} from '@/utils/helpers';
 import {
   checkIfUserExists,
   checkIfUserPaid,
@@ -12,6 +17,7 @@ import {
   applyMiddlewareCustom,
   getRateLimitMiddlewares
 } from '@/utils/applyRateLimit';
+import { programmingLanguages } from '@/constant/programminglanguages';
 
 const middlewares = getRateLimitMiddlewares({ limit: 10 }).map(
   applyMiddlewareCustom
@@ -100,8 +106,12 @@ const Document: NextApiHandler = async (req, res) => {
         }
       ]
     });
-    const documentedCode = removeCodeBlockWrappers(
+    let documentedCode = removeCodeBlockWrappers(
       completion.data?.choices[0].message?.content as string
+    );
+    documentedCode = filterWordsFromFirstLine(
+      documentedCode,
+      programmingLanguages
     );
     res.status(200).json({
       content: encrypt(documentedCode, key as string)

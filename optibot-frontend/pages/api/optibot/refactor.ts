@@ -1,4 +1,9 @@
-import { decrypt, encrypt, removeCodeBlockWrappers } from '@/utils/helpers';
+import {
+  decrypt,
+  encrypt,
+  filterWordsFromFirstLine,
+  removeCodeBlockWrappers
+} from '@/utils/helpers';
 import {
   checkIfUserExists,
   checkIfUserIsSubscribed,
@@ -12,6 +17,7 @@ import {
   applyMiddlewareCustom,
   getRateLimitMiddlewares
 } from '@/utils/applyRateLimit';
+import { programmingLanguages } from '@/constant/programminglanguages';
 
 const middlewares = getRateLimitMiddlewares({ limit: 10 }).map(
   applyMiddlewareCustom
@@ -98,11 +104,15 @@ const Refactor: NextApiHandler = async (req, res) => {
         }
       ]
     });
-    const documentedCode = removeCodeBlockWrappers(
+    let refactoredCode = removeCodeBlockWrappers(
       completion.data?.choices[0].message?.content as string
     );
+    refactoredCode = filterWordsFromFirstLine(
+      refactoredCode,
+      programmingLanguages
+    );
     res.status(200).json({
-      content: encrypt(documentedCode, key as string)
+      content: encrypt(refactoredCode, key as string)
     });
   } catch (error) {
     console.log(error);
