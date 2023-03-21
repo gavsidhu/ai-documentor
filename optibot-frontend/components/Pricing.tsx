@@ -14,8 +14,10 @@ interface Props {
 }
 
 const includedFeatures = [
-  'Document',
-  'Refactor',
+  'Code Refactoring',
+  'Code Documentation',
+  'All future updates',
+  '7 day money-back guarantee'
 ]
 
 export default function Pricing({ products }: Props) {
