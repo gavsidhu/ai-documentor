@@ -88,7 +88,8 @@ export default function Account({ user, count }: { user: User, count: number | n
       minimumFractionDigits: 0
     }).format((subscription?.prices?.unit_amount || 0) / 100);
 
-  const addAPIKey = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const addAPIKey = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     setLoading(true)
     try {
       const res = await axios.post(`${url}/api/api-key/add-api-key`, {
@@ -107,7 +108,6 @@ export default function Account({ user, count }: { user: User, count: number | n
     setLoading(true)
     try {
       const res = await axios.post(`${url}/api/api-key/remove-api-key`, {
-        apiKey: e.currentTarget.value,
         userId: user.id
       })
       setLoading(false)
@@ -123,13 +123,12 @@ export default function Account({ user, count }: { user: User, count: number | n
       <Modal open={open} setOpen={setOpen}>
         <div>
           <h3 className='text-base font-semibold leading-6 text-white'>Add API Key</h3>
-          <form className="mt-6 sm:flex sm:max-w-md">
+          <form className="mt-6 sm:flex sm:max-w-md" autoComplete='off' onSubmit={(e) => addAPIKey(e)}>
             <input
-              type="text"
+              type="password"
               id="apiKey"
               required
-              name='hidden'
-              autoComplete='false'
+              autoComplete="new-password"
               className="w-full min-w-0 appearance-none rounded-md border-0 bg-white/5 px-3 py-1.5 text-base text-white shadow-sm ring-1 ring-inset ring-white/10 placeholder:text-gray-500 sm:w-64 sm:text-sm sm:leading-6 xl:w-full"
               placeholder="Enter OpenAI API Key"
               onChange={(e) => setApiKey(e.currentTarget.value)}
@@ -138,7 +137,6 @@ export default function Account({ user, count }: { user: User, count: number | n
               <button
                 type="submit"
                 className="min-w-0 flex-auto border-0 bg-white text-zinc-800 transition ease-in-out duration-150 font-semibold text-center justify-center px-3.5 py-2  shadow-sm sm:text-sm sm:leading-6 hover:bg-zinc-800 hover:text-white hover:border-white"
-                onClick={(e) => addAPIKey(e)}
               >
                 Add API Key
               </button>
