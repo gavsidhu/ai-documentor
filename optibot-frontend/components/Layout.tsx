@@ -16,6 +16,7 @@ export default function Layout({ children, meta: pageMeta }: Props) {
   const meta = {
     title: 'Optibot',
     description: 'Document and refactor your code with Optibot for VS Code',
+    cardImage: "https://www.optibot.io/optibot-full-logo-black.png",
     ...pageMeta
   };
 
