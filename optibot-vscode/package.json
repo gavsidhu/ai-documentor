@@ -1,12 +1,13 @@
 {
   "name": "optibot",
   "displayName": "Optibot",
-  "description": "",
-  "version": "0.0.16",
+  "description": "Automatically document and refactor your code.",
+  "version": "0.1.0",
   "engines": {
     "vscode": "^1.75.0"
   },
   "publisher": "UplevelHQ",
+  "icon": "https://www.optibot.io/apple-touch-icon.png",
   "categories": [
     "Other"
   ],
