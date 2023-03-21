@@ -28,12 +28,13 @@ const SignIn = () => {
               <h1 className='font-bold text-3xl text-white'>Optibot</h1>
             </Link>
           </div>
+          <p className='text-white text-sm py-4'>Please create an account with the same email as your Github account.</p>
           <div className="flex flex-col space-y-4">
             <Auth
               supabaseClient={supabaseClient}
               providers={['github']}
               redirectTo={getURL()}
-              magicLink={true}
+              magicLink={false}
               appearance={{
                 theme: ThemeSupa,
                 variables: {
