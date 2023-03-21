@@ -7,7 +7,7 @@
     "vscode": "^1.75.0"
   },
   "publisher": "UplevelHQ",
-  "icon": "https://www.optibot.io/apple-touch-icon.png",
+  "icon": "assets/icon.png",
   "categories": [
     "Other"
   ],
@@ -53,6 +53,10 @@
         }
       ]
     }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gavsidhu/optibot/tree/main/optibot-vscode"
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
