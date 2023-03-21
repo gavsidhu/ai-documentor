@@ -98,8 +98,10 @@ export default function Account({ user, count }: { user: User, count: number | n
       })
       setLoading(false)
       alert(res.data.message)
+      setOpen(false)
     } catch (error) {
       setLoading(false)
+      setOpen(false)
       console.log(error)
     }
   }
@@ -125,7 +127,7 @@ export default function Account({ user, count }: { user: User, count: number | n
           <h3 className='text-base font-semibold leading-6 text-white'>Add API Key</h3>
           <form className="mt-6 sm:flex sm:max-w-md" autoComplete='off' onSubmit={(e) => addAPIKey(e)}>
             <input
-              type="password"
+              type="text"
               id="apiKey"
               required
               autoComplete="new-password"
