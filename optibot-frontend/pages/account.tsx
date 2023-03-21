@@ -127,10 +127,10 @@ export default function Account({ user, count }: { user: User, count: number | n
           <h3 className='text-base font-semibold leading-6 text-white'>Add API Key</h3>
           <form className="mt-6 sm:flex sm:max-w-md" autoComplete='off' onSubmit={(e) => addAPIKey(e)}>
             <input
-              type="text"
               id="apiKey"
               required
-              autoComplete="new-password"
+              autoComplete="off"
+              role="presentation"
               className="w-full min-w-0 appearance-none rounded-md border-0 bg-white/5 px-3 py-1.5 text-base text-white shadow-sm ring-1 ring-inset ring-white/10 placeholder:text-gray-500 sm:w-64 sm:text-sm sm:leading-6 xl:w-full"
               placeholder="Enter OpenAI API Key"
               onChange={(e) => setApiKey(e.currentTarget.value)}
