@@ -35,7 +35,7 @@ const Hero = () => {
                     </div>
                     <div className='w-[75%] lg:w-[80%] mx-auto'>
                         <video
-                            src="optibot-document-demo.mp4"
+                            src="optibot-trailer.mp4"
                             width={2432}
                             height={1442}
                             loop
