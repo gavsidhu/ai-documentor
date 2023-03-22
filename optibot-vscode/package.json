@@ -37,6 +37,10 @@
       {
         "command": "optibot.refactor",
         "title": "Optibot Refactor"
+      },
+      {
+        "command": "optibot.generateDocs",
+        "title": "Generate docs"
       }
     ],
     "menus": {
@@ -48,6 +52,11 @@
         },
         {
           "command": "optibot.refactor",
+          "group": "navigation",
+          "when": "editorTextFocus"
+        },
+        {
+          "command": "optibot.generateDocs",
           "group": "navigation",
           "when": "editorTextFocus"
         }

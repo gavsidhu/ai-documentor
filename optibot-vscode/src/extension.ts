@@ -5,7 +5,7 @@ import * as vscode from 'vscode';
 import axios, { AxiosError } from 'axios';
 import { Octokit } from '@octokit/rest';
 import { decrypt, encrypt } from './utils/security';
-import { getKey } from './utils/helpers';
+import { getKey, processFile } from './utils/helpers';
 
 /**
  * Activate extension
@@ -346,11 +346,21 @@ export function activate(context: vscode.ExtensionContext) {
     }
   );
 
+  let createDocsDisposable = vscode.commands.registerCommand(
+    'optibot.generateDocs',
+    async () => {
+
+      
+     
+    }
+  );
+
   /**
    * Push disposables to context
    */
   context.subscriptions.push(disposable);
   context.subscriptions.push(disposableRefactor);
+  context.subscriptions.push(createDocsDisposable);
 }
 
 /**
